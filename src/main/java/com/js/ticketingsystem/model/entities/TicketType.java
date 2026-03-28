@@ -47,10 +47,9 @@ public class TicketType {
     private Event event;
 
     @CreatedDate
-    @Column(name = "created_date", nullable = false, updatable = false)
-    private LocalDateTime createdDate;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_date", nullable = false)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime lastModifiedAt;
 }

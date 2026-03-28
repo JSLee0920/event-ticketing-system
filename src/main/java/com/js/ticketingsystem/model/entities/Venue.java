@@ -25,7 +25,7 @@ public class Venue {
     @Column(name = "venue_id")
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     private String address;

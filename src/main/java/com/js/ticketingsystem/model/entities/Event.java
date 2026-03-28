@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -38,7 +36,18 @@ public class Event {
     @JoinColumn(name = "venue_id")
     private Venue venue;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User organizer;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Event> events = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "event_staff",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> staffMembers = new HashSet<>();
 }

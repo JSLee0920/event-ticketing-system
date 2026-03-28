@@ -3,8 +3,11 @@ package com.js.ticketingsystem.model.entities;
 import com.js.ticketingsystem.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Getter
@@ -36,4 +39,19 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizer")
+    private List<Event> events = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "staffMembers")
+    private Set<Event> staffAssignments = new HashSet<>();
 }

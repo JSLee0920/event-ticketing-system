@@ -35,12 +35,12 @@ public class Ticket {
     private TicketStatus status;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name =  "updated_at", nullable = false)
-    private LocalDateTime lastModifiedDate;
+    @Column(nullable = false)
+    private LocalDateTime lastModifiedAt;
 
     private LocalDateTime scannedAt;
 }
