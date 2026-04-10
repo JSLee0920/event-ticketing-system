@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,12 +17,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "tickets")
+@EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ticket_id", nullable = false, updatable = false)
     private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_type_id")

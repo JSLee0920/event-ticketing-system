@@ -1,7 +1,9 @@
 package com.js.ticketingsystem.model.entities;
 
+import com.js.ticketingsystem.model.enums.EventStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -13,6 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "event")
+@EntityListeners(AuditingEntityListener.class)
 public class Event {
 
     @Id
@@ -41,7 +44,7 @@ public class Event {
     private User organizer;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Event> events = new ArrayList<>();
+    private List<TicketType> tickets = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -50,4 +53,8 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> staffMembers = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private EventStatus status;
 }

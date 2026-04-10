@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "ticket_type")
+@EntityListeners(AuditingEntityListener.class)
 public class TicketType {
 
     @Id
@@ -28,7 +31,7 @@ public class TicketType {
     private String name;
 
     @Column(name = "price", nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "description")
     private String description;
