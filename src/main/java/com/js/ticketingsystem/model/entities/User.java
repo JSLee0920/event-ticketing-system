@@ -49,11 +49,14 @@ public class User {
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "customer")
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "organizer")
+    @Builder.Default
     private List<Event> events = new ArrayList<>();
 
     @ManyToMany(mappedBy = "staffMembers")
+    @Builder.Default
     private Set<Event> staffAssignments = new HashSet<>();
 }

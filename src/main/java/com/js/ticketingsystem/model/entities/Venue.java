@@ -33,5 +33,6 @@ public class Venue {
     private Integer capacity;
 
     @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST)
+    @Builder.Default
     private List<Event> events = new ArrayList<>();
 }

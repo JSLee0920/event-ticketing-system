@@ -43,6 +43,7 @@ public class TicketType {
     private Integer availableQuantity;
 
     @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Ticket> tickets = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

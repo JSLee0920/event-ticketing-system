@@ -44,9 +44,11 @@ public class Event {
     private User organizer;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<TicketType> tickets = new ArrayList<>();
 
     @ManyToMany
+    @Builder.Default
     @JoinTable(
             name = "event_staff",
             joinColumns = @JoinColumn(name = "event_id"),
