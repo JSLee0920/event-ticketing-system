@@ -27,13 +27,12 @@ public class AuthService {
         }
 
         // Create new user
-        User user = new User();
-        user.setName(request.name());
-        user.setEmail(request.email());
-        user.setPhoneNum(request.phoneNumber());
-        user.setRole(request.role());
-
-        user.setPassword(passwordEncoder.encode(request.password()));
+        User user = User.builder()
+                .name(request.name())
+                .email(request.email())
+                .phoneNum(request.phoneNumber())
+                .role(request.role())
+                .password(passwordEncoder.encode(request.password())).build();
 
         userRepository.save(user);
 
