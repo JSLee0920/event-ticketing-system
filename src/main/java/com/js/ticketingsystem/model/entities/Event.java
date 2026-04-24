@@ -40,7 +40,7 @@ public class Event {
     private Venue venue;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User organizer;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -61,6 +61,6 @@ public class Event {
     private EventStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
