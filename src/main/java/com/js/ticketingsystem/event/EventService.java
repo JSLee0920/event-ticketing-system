@@ -2,6 +2,7 @@ package com.js.ticketingsystem.event;
 
 import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
+import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.model.entities.Category;
 import com.js.ticketingsystem.model.entities.Event;
 import com.js.ticketingsystem.model.entities.User;
@@ -13,6 +14,8 @@ import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.repository.VenueRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EventService {
@@ -54,5 +57,19 @@ public class EventService {
         Event savedEvent = eventRepository.save(event);
 
         return eventMapper.toEventResponse(savedEvent);
+    }
+
+    public List<EventSummaryResponse> getAllEvents() {
+        return eventRepository.findAll()
+                .stream()
+                .map(eventMapper::toEventSummaryResponse)
+                .toList();
+    }
+
+    public EventResponse getEventById(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+
+        return eventMapper.toEventResponse(event);
     }
 }
