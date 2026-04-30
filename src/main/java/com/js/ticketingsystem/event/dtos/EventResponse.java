@@ -1,9 +1,10 @@
 package com.js.ticketingsystem.event.dtos;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record EventResponse(
-        Long eventId,
+        UUID eventId,
         String title,
         String description,
         LocalDateTime startTime,

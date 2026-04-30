@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EventService {
@@ -66,7 +67,7 @@ public class EventService {
                 .toList();
     }
 
-    public EventResponse getEventById(Long eventId) {
+    public EventResponse getEventById(UUID eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 

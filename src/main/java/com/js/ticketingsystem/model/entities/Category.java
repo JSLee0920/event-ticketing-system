@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "categories")
@@ -16,8 +17,9 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "category_id")
+    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String name;
