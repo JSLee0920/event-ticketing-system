@@ -12,8 +12,10 @@ public interface EventMapper {
     @Mapping(source = "venue.name", target = "venueName")
     @Mapping(source = "organizer.name", target = "organizerName")
     @Mapping(source = "category.name", target = "categoryName")
+    @Mapping(source = "id", target = "eventId")
     EventResponse toEventResponse(Event event);
 
     @Mapping(source = "venue.name", target = "venueName")
+    @Mapping(source = "id", target = "eventId")
     EventSummaryResponse toEventSummaryResponse(Event event);
 }
