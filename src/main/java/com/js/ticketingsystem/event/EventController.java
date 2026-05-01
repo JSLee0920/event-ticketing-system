@@ -3,6 +3,7 @@ package com.js.ticketingsystem.event;
 import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
+import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,12 @@ public class EventController {
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getEventById(@PathVariable UUID id) {
         return ResponseEntity.ok(eventService.getEventById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EventResponse> updateEvent(
+            @PathVariable UUID id,
+            @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
+        return ResponseEntity.ok(eventService.updateEvent(id, request, organizerEmail));
     }
 }

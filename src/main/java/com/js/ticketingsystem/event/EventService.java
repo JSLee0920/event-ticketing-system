@@ -3,6 +3,7 @@ package com.js.ticketingsystem.event;
 import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
+import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
 import com.js.ticketingsystem.model.entities.Category;
 import com.js.ticketingsystem.model.entities.Event;
 import com.js.ticketingsystem.model.entities.User;
@@ -72,5 +73,29 @@ public class EventService {
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
         return eventMapper.toEventResponse(event);
+    }
+
+    @Transactional
+    public EventResponse updateEvent(UUID eventId, EventUpdateRequest request, String organizerEmail) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+
+        // Check only owner can edit this file
+        if (!event.getOrganizer().getEmail().equals(organizerEmail)) {
+            throw new SecurityException("You do not have permission to edit this event");
+        }
+
+        // Set the title, description and category
+        if (request.title() != null) event.setTitle(request.title());
+        if (request.description() != null) event.setDescription(request.description());
+
+        if (request.categoryId() != null) {
+            Category category = categoryRepository.findById(request.categoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+            event.setCategory(category);
+        }
+
+        Event savedEvent = eventRepository.save(event);
+        return eventMapper.toEventResponse(savedEvent);
     }
 }
