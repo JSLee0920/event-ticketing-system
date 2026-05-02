@@ -1,10 +1,10 @@
 package com.js.ticketingsystem.event;
 
+import com.js.ticketingsystem.common.ResourceNotFoundException;
 import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
-import com.js.ticketingsystem.common.ResourceNotFoundException;
 import com.js.ticketingsystem.model.entities.Category;
 import com.js.ticketingsystem.model.entities.Event;
 import com.js.ticketingsystem.model.entities.User;
@@ -103,9 +103,39 @@ public class EventService {
         return eventMapper.toEventResponse(savedEvent);
     }
 
+    @Transactional
+    public EventResponse publishEvent(UUID eventId, String organizerEmail) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        if (!event.getOrganizer().getEmail().equals(organizerEmail)) {
+            throw new AccessDeniedException("You do not have permission to publish this event");
+        }
+
+        if (event.getStatus() != EventStatus.DRAFT) {
+            throw new IllegalArgumentException("Only draft events can be published");
+        }
+
+        validateReadyToPublish(event);
+
+        event.setStatus(EventStatus.PUBLISHED);
+        return eventMapper.toEventResponse(eventRepository.save(event));
+    }
+
     private void validateEventTimeRange(java.time.LocalDateTime startTime, java.time.LocalDateTime endTime) {
         if (!endTime.isAfter(startTime)) {
             throw new IllegalArgumentException("End time must be after start time");
         }
+    }
+
+    private void validateReadyToPublish(Event event) {
+        if (event.getTitle() == null || event.getTitle().isBlank())
+            throw new IllegalArgumentException("Title required");
+        if (event.getStartTime() == null) throw new IllegalArgumentException("Start time required");
+        if (event.getEndTime() == null) throw new IllegalArgumentException("End time required");
+        if (!event.getEndTime().isAfter(event.getStartTime()))
+            throw new IllegalArgumentException("End time must be after start time");
+        if (event.getVenue() == null) throw new IllegalArgumentException("Venue required");
+        if (event.getCategory() == null) throw new IllegalArgumentException("Category required");
     }
 }
