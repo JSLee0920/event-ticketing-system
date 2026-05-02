@@ -3,9 +3,12 @@ package com.js.ticketingsystem.auth;
 import com.js.ticketingsystem.auth.dtos.AuthResponse;
 import com.js.ticketingsystem.auth.dtos.LoginRequest;
 import com.js.ticketingsystem.auth.dtos.RegisterRequest;
+import com.js.ticketingsystem.common.DuplicateResourceException;
 import com.js.ticketingsystem.model.entities.User;
+import com.js.ticketingsystem.model.enums.Role;
 import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.security.TokenService;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +26,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new IllegalArgumentException("Email is already registered!");
+            throw new DuplicateResourceException("Email is already registered");
         }
 
         // Create new user
@@ -31,7 +34,7 @@ public class AuthService {
                 .name(request.name())
                 .email(request.email())
                 .phoneNum(request.phoneNumber())
-                .role(request.role())
+                .role(Role.CUSTOMER)
                 .password(passwordEncoder.encode(request.password())).build();
 
         userRepository.save(user);
@@ -43,10 +46,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid email or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
         String token = tokenService.generateToken(user.getEmail(), user.getRole().name());
