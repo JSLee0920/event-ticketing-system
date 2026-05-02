@@ -4,6 +4,7 @@ import com.js.ticketingsystem.auth.dtos.AuthResponse;
 import com.js.ticketingsystem.auth.dtos.LoginRequest;
 import com.js.ticketingsystem.auth.dtos.RegisterRequest;
 import com.js.ticketingsystem.model.entities.User;
+import com.js.ticketingsystem.model.enums.Role;
 import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +32,7 @@ public class AuthService {
                 .name(request.name())
                 .email(request.email())
                 .phoneNum(request.phoneNumber())
-                .role(request.role())
+                .role(Role.CUSTOMER)
                 .password(passwordEncoder.encode(request.password())).build();
 
         userRepository.save(user);

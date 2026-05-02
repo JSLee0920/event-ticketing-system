@@ -53,7 +53,7 @@ public class EventService {
                 .organizer(organizer)
                 .venue(venue)
                 .category(category)
-                .status(EventStatus.PUBLISHED)
+                .status(EventStatus.DRAFT)
                 .build();
 
         Event savedEvent = eventRepository.save(event);
