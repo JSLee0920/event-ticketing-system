@@ -4,6 +4,7 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
+import com.js.ticketingsystem.common.ResourceNotFoundException;
 import com.js.ticketingsystem.model.entities.Category;
 import com.js.ticketingsystem.model.entities.Event;
 import com.js.ticketingsystem.model.entities.User;
@@ -14,6 +15,7 @@ import com.js.ticketingsystem.repository.EventRepository;
 import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.repository.VenueRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,12 +40,14 @@ public class EventService {
 
     @Transactional
     public EventResponse createEvent(EventCreateRequest request, String organizerEmail) {
+        validateEventTimeRange(request.startTime(), request.endTime());
+
         User organizer = userRepository.findByEmail(organizerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Organizer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Organizer not found"));
         Venue venue = venueRepository.findById(request.venueId())
-                .orElseThrow(() -> new IllegalArgumentException(("Venue not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Venue not found"));
         Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         Event event = Event.builder()
                 .title(request.title())
@@ -70,7 +74,7 @@ public class EventService {
 
     public EventResponse getEventById(UUID eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
 
         return eventMapper.toEventResponse(event);
     }
@@ -78,11 +82,11 @@ public class EventService {
     @Transactional
     public EventResponse updateEvent(UUID eventId, EventUpdateRequest request, String organizerEmail) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
 
         // Check only owner can edit this file
         if (!event.getOrganizer().getEmail().equals(organizerEmail)) {
-            throw new SecurityException("You do not have permission to edit this event");
+            throw new AccessDeniedException("You do not have permission to edit this event");
         }
 
         // Set the title, description and category
@@ -91,11 +95,17 @@ public class EventService {
 
         if (request.categoryId() != null) {
             Category category = categoryRepository.findById(request.categoryId())
-                    .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
             event.setCategory(category);
         }
 
         Event savedEvent = eventRepository.save(event);
         return eventMapper.toEventResponse(savedEvent);
+    }
+
+    private void validateEventTimeRange(java.time.LocalDateTime startTime, java.time.LocalDateTime endTime) {
+        if (!endTime.isAfter(startTime)) {
+            throw new IllegalArgumentException("End time must be after start time");
+        }
     }
 }

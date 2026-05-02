@@ -4,6 +4,7 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<EventResponse> createEvent(
-            @RequestBody EventCreateRequest request,
+            @Valid @RequestBody EventCreateRequest request,
             @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
         EventResponse response = eventService.createEvent(request, organizerEmail);
         return ResponseEntity.ok(response);
@@ -42,7 +43,7 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<EventResponse> updateEvent(
             @PathVariable UUID id,
-            @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
+            @Valid @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
         return ResponseEntity.ok(eventService.updateEvent(id, request, organizerEmail));
     }
 }
