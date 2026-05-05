@@ -7,6 +7,8 @@ import com.js.ticketingsystem.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
@@ -31,5 +33,12 @@ public class CategoryService {
         Category savedCategory = categoryRepository.save(category);
 
         return categoryMapper.toCategoryResponse(savedCategory);
+    }
+
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::toCategoryResponse)
+                .toList();
     }
 }
