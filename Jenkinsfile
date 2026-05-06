@@ -28,14 +28,19 @@ pipeline {
                     echo 'Injecting secure PEM files and compiling code...'
 
                     // Fetch both files from the Jenkins vault simultaneously
-                    withCredentials([
-                        file(credentialsId: 'jwt-private-key', variable: 'JWT_PRIVATE_KEY'),
-                        file(credentialsId: 'jwt-public-key', variable: 'JWT_PUBLIC_KEY')
-                    ]) {
+                   withCredentials([
+        file(credentialsId: 'jwt-private-key', variable: 'JWT_PRIVATE_KEY_PATH'),
+        file(credentialsId: 'jwt-public-key', variable: 'JWT_PUBLIC_KEY_PATH')
+        ]) {
+            // Using ''' allows us to run multiple Linux commands in the exact same secure session
+            sh '''
+                echo "Setting execution permissions for Maven wrapper..."
+                chmod +x mvnw
 
-                        // Pass the temporary file paths to the Spring Boot Test environment
-                       sh './mvnw clean package -Djwt.private.key=file:$JWT_PRIVATE_KEY_PATH -Djwt.public.key=file:$JWT_PUBLIC_KEY_PATH'
-                    }
+                echo "Running Maven build..."
+                ./mvnw clean package -Djwt.private.key=file:$JWT_PRIVATE_KEY_PATH -Djwt.public.key=file:$JWT_PUBLIC_KEY_PATH
+            '''
+        }
                 }
             }
             post {
