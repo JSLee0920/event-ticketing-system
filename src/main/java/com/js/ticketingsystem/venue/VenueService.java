@@ -1,5 +1,6 @@
 package com.js.ticketingsystem.venue;
 
+import com.js.ticketingsystem.common.ResourceNotFoundException;
 import com.js.ticketingsystem.model.entities.Venue;
 import com.js.ticketingsystem.repository.VenueRepository;
 import com.js.ticketingsystem.venue.dtos.VenueRequest;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class VenueService {
@@ -41,5 +43,11 @@ public class VenueService {
                 .stream()
                 .map(venueMapper::toVenueResponse)
                 .toList();
+    }
+
+    public VenueResponse getVenueById(UUID venueId) {
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Venue not found"));
+        return venueMapper.toVenueResponse(venue);
     }
 }

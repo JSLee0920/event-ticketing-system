@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/venue")
@@ -27,5 +28,10 @@ public class VenueController {
     @GetMapping
     public ResponseEntity<List<VenueResponse>> getAllVenues() {
         return ResponseEntity.ok(venueService.getAllVenues());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VenueResponse> getVenueById(@PathVariable UUID id) {
+        return ResponseEntity.ok(venueService.getVenueById(id));
     }
 }
