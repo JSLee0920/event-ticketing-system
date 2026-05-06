@@ -11,11 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,6 +65,30 @@ public class AuthServiceTest {
         assertNotNull(response.token());
         verify(userRepository, times(1))
                 .findByEmail("danielgoh123@gmail.com");
+    }
+
+    @Test
+    void whenInvalidPassword_thenThrowException() {
+        User testUser = User.builder()
+                .email("danielgoh123@gmail.com")
+                .password("encodedPassword")
+                .role(Role.CUSTOMER)
+                .phoneNum("017-2345798")
+                .build();
+
+        when(userRepository.findByEmail(testUser.getEmail()))
+                .thenReturn(Optional.of(testUser));
+
+        when(passwordEncoder.matches("wrongPassword", "encodedPassword"))
+                .thenReturn(false);
+
+        LoginRequest request = new LoginRequest(testUser.getEmail(), "wrongPassword");
+
+        assertThrows(BadCredentialsException.class, () -> {
+            authService.login(request);
+        });
+
+        verify(tokenService, never()).generateToken(any(), any());
     }
 }
 
