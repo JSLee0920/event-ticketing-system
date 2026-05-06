@@ -30,7 +30,7 @@ public class VenueController {
         return ResponseEntity.ok(venueService.getAllVenues());
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getVenueById(@PathVariable UUID id) {
         return ResponseEntity.ok(venueService.getVenueById(id));
     }
