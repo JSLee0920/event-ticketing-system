@@ -1,4 +1,4 @@
-package com.js.ticketingsystem.auth.dtos;
+package com.js.ticketingsystem.user.dtos;
 
 import com.js.ticketingsystem.model.enums.Role;
 
