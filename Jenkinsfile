@@ -25,19 +25,24 @@ pipeline {
         stage('Build & Run Tests') {
             steps {
                 container('maven') {
-                    echo 'Compiling code and running JUnit tests...'
-                    // 'package' runs the tests and builds the .jar file
-                    sh 'mvn clean package'
+                    echo 'Injecting secure PEM files and compiling code...'
+
+                    // Fetch both files from the Jenkins vault simultaneously
+                    withCredentials([
+                        file(credentialsId: 'jwt-private-key', variable: 'JWT_PRIVATE_KEY'),
+                        file(credentialsId: 'jwt-public-key', variable: 'JWT_PUBLIC_KEY')
+                    ]) {
+
+                        // Pass the temporary file paths to the Spring Boot Test environment
+                        sh 'mvn clean package -D jwt.private-key=file:${JWT_PRIVATE_KEY} -D jwt.public-key=file:${JWT_PUBLIC_KEY}'
+                    }
                 }
             }
-            // This runs after the build stage finishes
             post {
                 always {
-                    //  Read the XML test reports Maven generated and build a UI dashboard
                     junit 'target/surefire-reports/*.xml'
                 }
                 success {
-                    //  save it to the Jenkins controller
                     archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 }
             }
