@@ -34,7 +34,7 @@ pipeline {
                     ]) {
 
                         // Pass the temporary file paths to the Spring Boot Test environment
-                        sh 'mvn clean package -D jwt.private-key=file:${JWT_PRIVATE_KEY} -D jwt.public-key=file:${JWT_PUBLIC_KEY}'
+                        sh "./mvnw clean package -D jwt.private-key-path=file:${JWT_PRIVATE_KEY} -D jwt.public-key-path=file:${JWT_PUBLIC_KEY}"
                     }
                 }
             }
