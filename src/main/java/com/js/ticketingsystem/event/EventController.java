@@ -4,12 +4,12 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
+import com.js.ticketingsystem.user.UserService;
+import com.js.ticketingsystem.user.dtos.UserSummaryResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@EnableWebSecurity
-@EnableMethodSecurity
 @RequestMapping("/api/events")
 public class EventController {
 
     private final EventService eventService;
+    private final UserService userService;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -62,5 +62,14 @@ public class EventController {
             @PathVariable UUID id,
             @Valid @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
         return ResponseEntity.ok(eventService.updateEvent(id, request, organizerEmail));
+    }
+
+    @GetMapping("/{id}/attendees")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public ResponseEntity<List<UserSummaryResponse>> getEventAttendees(
+            @PathVariable UUID eventId,
+            @AuthenticationPrincipal(expression = "subject") String email
+    ) {
+        return ResponseEntity.ok(userService.getAttendeesByEventId(eventId, email));
     }
 }

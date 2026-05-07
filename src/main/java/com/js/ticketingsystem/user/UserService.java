@@ -3,6 +3,7 @@ package com.js.ticketingsystem.user;
 import com.js.ticketingsystem.common.ResourceNotFoundException;
 import com.js.ticketingsystem.model.entities.Event;
 import com.js.ticketingsystem.model.entities.User;
+import com.js.ticketingsystem.model.enums.Role;
 import com.js.ticketingsystem.repository.EventRepository;
 import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.user.dtos.UserResponse;
@@ -82,5 +83,16 @@ public class UserService {
                 .stream()
                 .map(userMapper::toUserSummaryResponse)
                 .toList();
+    }
+
+    @Transactional
+    public UserResponse updateRole(UUID userId, Role newRole) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        user.setRole(newRole);
+
+        User savedUser = userRepository.save(user);
+        return userMapper.toUserResponse(user);
     }
 }

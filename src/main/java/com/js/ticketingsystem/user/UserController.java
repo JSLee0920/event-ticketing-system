@@ -1,12 +1,12 @@
 package com.js.ticketingsystem.user;
 
+import com.js.ticketingsystem.model.enums.Role;
 import com.js.ticketingsystem.user.dtos.UserResponse;
 import com.js.ticketingsystem.user.dtos.UserSummaryResponse;
 import com.js.ticketingsystem.user.dtos.UserUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@EnableWebSecurity
-@EnableMethodSecurity
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
@@ -35,23 +33,22 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserProfile(email, request));
     }
 
-    // For organizer only
-    @GetMapping("/events/{eventId}/attendees")
-    public ResponseEntity<List<UserSummaryResponse>> getEventAttendees(
-            @PathVariable UUID eventId,
-            @AuthenticationPrincipal(expression = "subject") String email
-    ) {
-        return ResponseEntity.ok(userService.getAttendeesByEventId(eventId, email));
-    }
-
     // Staff Methods Only
     @GetMapping
+    @PreAuthorize("hasRole('STAFF')")
     public ResponseEntity<List<UserSummaryResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('STAFF')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('STAFF')")
+    public ResponseEntity<UserResponse> updateUserRole(@PathVariable UUID id, @Valid @RequestParam Role role) {
+        return ResponseEntity.ok(userService.updateRole(id, role));
     }
 }
