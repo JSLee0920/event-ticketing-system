@@ -5,6 +5,8 @@ import com.js.ticketingsystem.user.dtos.UserSummaryResponse;
 import com.js.ticketingsystem.user.dtos.UserUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@EnableWebSecurity
+@EnableMethodSecurity
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
