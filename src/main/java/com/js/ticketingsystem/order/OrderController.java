@@ -28,6 +28,5 @@ public class OrderController {
     ) {
         String orderId = orderService.createPendingOrder(request, customerEmail);
         return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
-
     }
 }

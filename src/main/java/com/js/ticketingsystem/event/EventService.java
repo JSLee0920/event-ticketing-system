@@ -5,10 +5,7 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
-import com.js.ticketingsystem.model.entities.Category;
-import com.js.ticketingsystem.model.entities.Event;
-import com.js.ticketingsystem.model.entities.User;
-import com.js.ticketingsystem.model.entities.Venue;
+import com.js.ticketingsystem.model.entities.*;
 import com.js.ticketingsystem.model.enums.EventStatus;
 import com.js.ticketingsystem.repository.CategoryRepository;
 import com.js.ticketingsystem.repository.EventRepository;
@@ -59,6 +56,19 @@ public class EventService {
                 .category(category)
                 .status(EventStatus.DRAFT)
                 .build();
+
+        List<TicketType> ticketTypes = request.ticketTypes().stream().map(tReq ->
+                TicketType.builder()
+                        .event(event)
+                        .name(tReq.name())
+                        .price(tReq.price())
+                        .description(tReq.description())
+                        .totalQuantity(tReq.quantity())
+                        .availableQuantity(tReq.quantity()) // Available starts exactly equal to Total
+                        .build()
+        ).toList();
+
+        event.setTicketTypes(ticketTypes);
 
         Event savedEvent = eventRepository.save(event);
 

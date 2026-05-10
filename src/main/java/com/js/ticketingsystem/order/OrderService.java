@@ -1,12 +1,10 @@
 package com.js.ticketingsystem.order;
 
 import com.js.ticketingsystem.common.ResourceNotFoundException;
-import com.js.ticketingsystem.model.entities.Event;
-import com.js.ticketingsystem.model.entities.Order;
-import com.js.ticketingsystem.model.entities.TicketType;
-import com.js.ticketingsystem.model.entities.User;
+import com.js.ticketingsystem.model.entities.*;
 import com.js.ticketingsystem.model.enums.EventStatus;
 import com.js.ticketingsystem.model.enums.OrderStatus;
+import com.js.ticketingsystem.model.enums.TicketStatus;
 import com.js.ticketingsystem.order.dtos.OrderCreateRequest;
 import com.js.ticketingsystem.order.dtos.TicketSelection;
 import com.js.ticketingsystem.repository.EventRepository;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -47,6 +46,13 @@ public class OrderService {
 
         BigDecimal totalAmount = BigDecimal.ZERO;
 
+        Order order = Order.builder()
+                .customer(customer)
+                .orderDate(LocalDateTime.now())
+                .totalAmount(totalAmount)
+                .status(OrderStatus.PENDING)
+                .build();
+
         for (TicketSelection selection : request.selections()) {
             TicketType ticketType = ticketTypeRepository.findById(selection.ticketTypeId())
                     .orElseThrow(() -> new ResourceNotFoundException("Ticket type not found"));
@@ -67,14 +73,19 @@ public class OrderService {
             // Calculate running total (Price * Quantity)
             BigDecimal lineItemTotal = ticketType.getPrice().multiply(BigDecimal.valueOf(selection.quantity()));
             totalAmount = totalAmount.add(lineItemTotal);
+
+            for (int i = 0; i < selection.quantity(); i++) {
+                Ticket ticket = Ticket.builder()
+                        .order(order)
+                        .ticketType(ticketType)
+                        .ticketToken(UUID.randomUUID().toString())
+                        .status(TicketStatus.ISSUED)
+                        .build();
+                order.getTickets().add(ticket);
+            }
         }
 
-        Order order = Order.builder()
-                .customer(customer)
-                .orderDate(LocalDateTime.now())
-                .totalAmount(totalAmount)
-                .status(OrderStatus.PENDING)
-                .build();
+        order.setTotalAmount(totalAmount);
 
         Order savedOrder = orderRepository.save(order);
         return savedOrder.getId().toString();
