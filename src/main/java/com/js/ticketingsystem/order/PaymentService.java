@@ -7,6 +7,7 @@ import com.js.ticketingsystem.model.enums.OrderStatus;
 import com.js.ticketingsystem.model.enums.PaymentStatus;
 import com.js.ticketingsystem.repository.OrderRepository;
 import com.js.ticketingsystem.repository.PaymentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

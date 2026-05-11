@@ -27,6 +27,6 @@ public class OrderController {
             @AuthenticationPrincipal(expression = "subject") String customerEmail
     ) {
         String orderId = orderService.createPendingOrder(request, customerEmail);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully, Order ID: " + orderId);
     }
 }
