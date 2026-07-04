@@ -2,6 +2,7 @@ package com.js.ticketingsystem.order;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,8 +23,9 @@ public class PaymentController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<String> payForOrder(
             @PathVariable UUID orderId,
-            @RequestParam(defaultValue = "CREDIT_CARD") String paymentMethod) {
+            @RequestParam(defaultValue = "CREDIT_CARD") String paymentMethod,
+            @AuthenticationPrincipal(expression = "subject") String customerEmail) {
 
-        return ResponseEntity.ok(paymentService.processMockPayment(orderId, paymentMethod));
+        return ResponseEntity.ok(paymentService.processMockPayment(orderId, paymentMethod, customerEmail));
     }
 }

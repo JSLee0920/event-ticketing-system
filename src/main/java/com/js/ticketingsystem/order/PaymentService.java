@@ -8,6 +8,7 @@ import com.js.ticketingsystem.model.enums.PaymentStatus;
 import com.js.ticketingsystem.repository.OrderRepository;
 import com.js.ticketingsystem.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,10 +25,14 @@ public class PaymentService {
     }
 
     @Transactional
-    public String processMockPayment(UUID orderId, String paymentMethod) {
+    public String processMockPayment(UUID orderId, String paymentMethod, String customerEmail) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if (!order.getCustomer().getEmail().equals(customerEmail)) {
+            throw new AccessDeniedException("You do not have permission to pay for this order");
+        }
 
         if (order.getStatus() != OrderStatus.PENDING) {
             throw new IllegalArgumentException("This order has already been processed or cancelled.");
