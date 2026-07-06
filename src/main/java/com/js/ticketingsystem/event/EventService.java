@@ -76,15 +76,29 @@ public class EventService {
     }
 
     public List<EventSummaryResponse> getAllEvents() {
-        return eventRepository.findAll()
+        // Public listing only exposes events that are on sale
+        return eventRepository.findByStatus(EventStatus.PUBLISHED)
                 .stream()
                 .map(eventMapper::toEventSummaryResponse)
                 .toList();
     }
 
-    public EventResponse getEventById(UUID eventId) {
+    public List<EventSummaryResponse> getMyEvents(String organizerEmail) {
+        return eventRepository.findByOrganizerEmailOrderByStartTimeDesc(organizerEmail)
+                .stream()
+                .map(eventMapper::toEventSummaryResponse)
+                .toList();
+    }
+
+    public EventResponse getEventById(UUID eventId, String viewerEmail) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        // Drafts are only visible to their organizer
+        if (event.getStatus() == EventStatus.DRAFT
+                && (viewerEmail == null || !event.getOrganizer().getEmail().equals(viewerEmail))) {
+            throw new ResourceNotFoundException("Event not found");
+        }
 
         return eventMapper.toEventResponse(event);
     }

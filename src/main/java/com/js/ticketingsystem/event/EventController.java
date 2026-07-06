@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,9 +52,19 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public ResponseEntity<List<EventSummaryResponse>> getMyEvents(
+            @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
+        return ResponseEntity.ok(eventService.getMyEvents(organizerEmail));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEventById(@PathVariable UUID id) {
-        return ResponseEntity.ok(eventService.getEventById(id));
+    public ResponseEntity<EventResponse> getEventById(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt) {
+        String viewerEmail = jwt != null ? jwt.getSubject() : null;
+        return ResponseEntity.ok(eventService.getEventById(id, viewerEmail));
     }
 
     @PutMapping("/{id}")
@@ -67,7 +78,7 @@ public class EventController {
     @GetMapping("/{id}/attendees")
     @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<List<UserSummaryResponse>> getEventAttendees(
-            @PathVariable UUID eventId,
+            @PathVariable("id") UUID eventId,
             @AuthenticationPrincipal(expression = "subject") String email
     ) {
         return ResponseEntity.ok(userService.getAttendeesByEventId(eventId, email));
