@@ -1,5 +1,6 @@
 package com.js.ticketingsystem.order;
 
+import com.js.ticketingsystem.order.dtos.PaymentResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +22,7 @@ public class PaymentController {
     // For now, we will just pass the method as a query param for the mock
     @PostMapping("/{orderId}/pay")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<String> payForOrder(
+    public ResponseEntity<PaymentResponse> payForOrder(
             @PathVariable UUID orderId,
             @RequestParam(defaultValue = "CREDIT_CARD") String paymentMethod,
             @AuthenticationPrincipal(expression = "subject") String customerEmail) {

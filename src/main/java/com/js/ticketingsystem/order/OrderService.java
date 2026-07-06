@@ -20,6 +20,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,9 @@ public class OrderService {
 
     @Value("${app.orders.pending-expiry-minutes:15}")
     private long pendingExpiryMinutes;
+
+    @Value("${app.orders.expiry-batch-size:100}")
+    private int expiryBatchSize;
 
     public OrderService(
         OrderRepository orderRepository,
@@ -156,16 +161,26 @@ public class OrderService {
         }
 
         cancelAndReleaseInventory(order);
-        return orderMapper.toOrderResponse(orderRepository.save(order));
+        // @Version on Order guards against a concurrent payment confirming this order mid-cancel.
+        try {
+            return orderMapper.toOrderResponse(orderRepository.saveAndFlush(order));
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new IllegalArgumentException("This order was updated concurrently. Please retry.");
+        }
     }
 
-    // Abandoned checkouts hold inventory, so stale pending orders must be swept back
+    // Abandoned checkouts hold inventory, so stale pending orders must be swept back.
+    // Bounded per-run batch keeps each transaction short; the frequent schedule drains backlog over time.
     @Scheduled(fixedRateString = "${app.orders.expiry-check-ms:60000}")
     @Transactional
     public void expireStalePendingOrders() {
         LocalDateTime cutoff = LocalDateTime.now().minusMinutes(pendingExpiryMinutes);
-        List<Order> staleOrders = orderRepository.findByStatusAndOrderDateBefore(OrderStatus.PENDING, cutoff);
+        List<Order> staleOrders = orderRepository.findByStatusAndOrderDateBefore(
+                OrderStatus.PENDING, cutoff, PageRequest.of(0, expiryBatchSize));
 
+        // A concurrent payment can win the @Version race and throw here, rolling back the
+        // whole batch. That is fine: confirmed orders are no longer PENDING, so the next
+        // scheduled run simply re-processes whatever is still stale.
         for (Order order : staleOrders) {
             cancelAndReleaseInventory(order);
             orderRepository.save(order);

@@ -7,19 +7,25 @@ import com.js.ticketingsystem.model.enums.Role;
 import com.js.ticketingsystem.repository.CategoryRepository;
 import com.js.ticketingsystem.repository.UserRepository;
 import com.js.ticketingsystem.repository.VenueRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+// Dev/local only: seeds demo data. Never active in prod so seeded credentials cannot become a backdoor.
 @Component
+@Profile({"local", "dev"})
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final VenueRepository venueRepository;
     private final CategoryRepository categoryRepository;
     private final PasswordEncoder passwordEncoder;
+
+    // Password for the seeded demo accounts; override via app.seed.default-password in local config.
+    @Value("${app.seed.default-password:password123}")
+    private String seedPassword;
 
     public DatabaseSeeder(UserRepository userRepository,
                           VenueRepository venueRepository,
@@ -34,35 +40,10 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if (userRepository.findByEmail("staff@example.com").isEmpty()) {
-            System.out.println("Seeding Users...");
-
-            User staff = User.builder()
-                    .name("System Staff")
-                    .email("staff@example.com")
-                    .password(passwordEncoder.encode("password123"))
-                    .phoneNum("0174561222")
-                    .role(Role.STAFF)
-                    .build();
-
-            User organizer = User.builder()
-                    .name("Event Organizer")
-                    .email("organizer@example.com")
-                    .password(passwordEncoder.encode("password123"))
-                    .phoneNum("0123451200")
-                    .role(Role.ORGANIZER)
-                    .build();
-
-            User customer = User.builder()
-                    .name("Regular Customer")
-                    .email("customer@example.com")
-                    .password(passwordEncoder.encode("password123"))
-                    .phoneNum("0135679999")
-                    .role(Role.CUSTOMER)
-                    .build();
-
-            userRepository.saveAll(List.of(staff, organizer, customer));
-        }
+        System.out.println("Seeding Users...");
+        seedUserIfMissing("System Staff", "staff@example.com", "0174561222", Role.STAFF);
+        seedUserIfMissing("Event Organizer", "organizer@example.com", "0123451200", Role.ORGANIZER);
+        seedUserIfMissing("Regular Customer", "customer@example.com", "0135679999", Role.CUSTOMER);
 
         if (venueRepository.count() == 0) {
             System.out.println("Seeding Venues...");
@@ -84,5 +65,20 @@ public class DatabaseSeeder implements CommandLineRunner {
         }
 
         System.out.println("Database Seeding Complete!");
+    }
+
+    // Seed each account independently so a missing organizer/customer is still created
+    // even when staff already exists.
+    private void seedUserIfMissing(String name, String email, String phoneNum, Role role) {
+        if (userRepository.findByEmail(email).isEmpty()) {
+            User user = User.builder()
+                    .name(name)
+                    .email(email)
+                    .password(passwordEncoder.encode(seedPassword))
+                    .phoneNum(phoneNum)
+                    .role(role)
+                    .build();
+            userRepository.save(user);
+        }
     }
 }

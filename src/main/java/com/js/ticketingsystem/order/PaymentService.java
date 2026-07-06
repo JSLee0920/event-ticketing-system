@@ -5,9 +5,11 @@ import com.js.ticketingsystem.model.entities.Order;
 import com.js.ticketingsystem.model.entities.Payment;
 import com.js.ticketingsystem.model.enums.OrderStatus;
 import com.js.ticketingsystem.model.enums.PaymentStatus;
+import com.js.ticketingsystem.order.dtos.PaymentResponse;
 import com.js.ticketingsystem.repository.OrderRepository;
 import com.js.ticketingsystem.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public String processMockPayment(UUID orderId, String paymentMethod, String customerEmail) {
+    public PaymentResponse processMockPayment(UUID orderId, String paymentMethod, String customerEmail) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -55,11 +57,16 @@ public class PaymentService {
 
             paymentRepository.save(payment);
 
-            // Mark the Order as CONFIRMED
+            // Mark the Order as CONFIRMED. @Version on Order guards against a concurrent
+            // cancel/expiry racing this payment, so only one terminal state wins.
             order.setStatus(OrderStatus.CONFIRMED);
-            orderRepository.save(order);
+            try {
+                orderRepository.saveAndFlush(order);
+            } catch (ObjectOptimisticLockingFailureException e) {
+                throw new IllegalArgumentException("This order has already been processed or cancelled.");
+            }
 
-            return "Payment successful! Transaction ID: " + payment.getTransactionId();
+            return new PaymentResponse(PaymentStatus.SUCCESS.name(), payment.getTransactionId());
         } else {
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
