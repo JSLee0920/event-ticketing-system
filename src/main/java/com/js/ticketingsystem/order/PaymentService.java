@@ -69,7 +69,11 @@ public class PaymentService {
             return new PaymentResponse(PaymentStatus.SUCCESS.name(), payment.getTransactionId());
         } else {
             order.setStatus(OrderStatus.CANCELLED);
-            orderRepository.save(order);
+            try {
+                orderRepository.saveAndFlush(order);
+            } catch (ObjectOptimisticLockingFailureException e) {
+                throw new IllegalArgumentException("This order has already been processed or cancelled.");
+            }
             throw new IllegalArgumentException("Payment failed. Order cancelled.");
         }
     }
