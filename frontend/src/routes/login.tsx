@@ -1,25 +1,19 @@
-import { useState } from 'react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useForm } from '@tanstack/react-form'
+import { z } from 'zod'
 import { AuthLayout } from '#/components/auth/auth-layout'
 import {
   AuthField,
   AuthHeading,
   AuthSubmit,
   OrDivider,
+  firstError,
 } from '#/components/auth/auth-fields'
-import { RoleTabs, type AuthRole } from '#/components/auth/role-tabs'
 import { GoogleButton } from '#/components/auth/google-button'
 
 export const Route = createFileRoute('/login')({ component: LoginPage })
 
-const SUBTITLES: Record<AuthRole, string> = {
-  customer: 'Log in to see your tickets and orders.',
-  organizer: 'Log in to manage your events and sales.',
-  staff: 'Log in to scan tickets at the door.',
-}
-
 function LoginPage() {
-  const [role, setRole] = useState<AuthRole>('customer')
   const navigate = useNavigate()
 
   // Organizers land on the dashboard; everyone else on Discover.
@@ -28,48 +22,99 @@ function LoginPage() {
     navigate({ to: '/' })
   }
 
+  const form = useForm({
+    defaultValues: { email: '', password: '' },
+    validators: {
+      onSubmit: z.object({
+        email: z
+          .string()
+          .min(1, 'Enter your email')
+          .email('Enter a valid email'),
+        password: z.string().min(1, 'Enter your password'),
+      }),
+    },
+    onSubmit: () => signIn(),
+  })
+
   return (
     <AuthLayout>
-      <AuthHeading title="Welcome Back" subtitle={SUBTITLES[role]} />
-      <RoleTabs value={role} onChange={setRole} label="Log in as" />
+      <AuthHeading
+        title="Welcome Back"
+        subtitle="Log in to see your tickets, events, and orders."
+      />
 
       <form
-        className="mt-4 flex flex-col gap-3.5"
+        noValidate
+        className="mt-6 flex flex-col gap-3.5"
         onSubmit={(e) => {
           e.preventDefault()
-          signIn()
+          form.handleSubmit()
         }}
       >
-        <AuthField
-          id="email"
-          label="Email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          required
-        />
-        <AuthField
-          id="password"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          required
-        />
+        <form.Field
+          name="email"
+          validators={{
+            onBlur: z
+              .string()
+              .min(1, 'Enter your email')
+              .email('Enter a valid email'),
+          }}
+        >
+          {(field) => (
+            <AuthField
+              id="email"
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+              error={firstError(field.state.meta.errors)}
+            />
+          )}
+        </form.Field>
+
+        <form.Field
+          name="password"
+          validators={{ onBlur: z.string().min(1, 'Enter your password') }}
+        >
+          {(field) => (
+            <AuthField
+              id="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+              error={firstError(field.state.meta.errors)}
+            />
+          )}
+        </form.Field>
+
         <Link
           to="/forgot-password"
           className="-mt-1.5 text-right text-xs font-semibold text-primary no-underline"
         >
-          Forgot password?
+          Forgot Password?
         </Link>
 
-        <AuthSubmit>Log in</AuthSubmit>
+        <form.Subscribe selector={(s) => s.isSubmitting}>
+          {(isSubmitting) => (
+            <AuthSubmit disabled={isSubmitting}>Log in</AuthSubmit>
+          )}
+        </form.Subscribe>
+
         <OrDivider />
         <GoogleButton label="Sign in with Google" onClick={signIn} />
 
         <p className="text-center text-[13px] text-muted-foreground">
           New here?{' '}
-          <Link to="/register" className="font-semibold text-primary no-underline">
+          <Link
+            to="/register"
+            className="font-semibold text-primary no-underline"
+          >
             Create an account
           </Link>
         </p>

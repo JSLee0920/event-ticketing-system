@@ -4,13 +4,16 @@ import { AuthWallpaper } from './auth-wallpaper'
 
 export function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background p-6 sm:p-10">
-      <div className="flex w-full max-w-[880px] items-stretch justify-center gap-6">
-        <div className="w-full max-w-[400px] self-center rounded-[18px] border border-border bg-card p-7 shadow-sm sm:p-9">
-          <OdeonWordmark />
-          {children}
+    <main className="flex min-h-screen bg-background">
+      <div className="relative flex flex-1 flex-col px-6 py-7 sm:px-10">
+        <OdeonWordmark />
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-[380px] pb-10">{children}</div>
         </div>
-        <AuthWallpaper className="hidden flex-1 lg:block" />
+      </div>
+
+      <div className="hidden p-3 lg:block lg:w-1/2">
+        <AuthWallpaper className="h-full w-full" />
       </div>
     </main>
   )

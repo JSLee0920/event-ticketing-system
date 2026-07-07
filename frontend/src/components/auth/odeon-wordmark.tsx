@@ -4,7 +4,7 @@ export function OdeonWordmark({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'text-center font-display text-xl font-extrabold tracking-[-0.03em]',
+        'font-display text-3xl font-extrabold tracking-[-0.03em]',
         className,
       )}
     >

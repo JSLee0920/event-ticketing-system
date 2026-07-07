@@ -44,13 +44,13 @@ function ForgotPasswordPage() {
             placeholder="you@example.com"
             required
           />
-          <AuthSubmit>Send reset link</AuthSubmit>
+          <AuthSubmit>Send Reset Link</AuthSubmit>
         </form>
       )}
 
       <p className="mt-4 text-center text-[13px] text-muted-foreground">
         <Link to="/login" className="font-semibold text-primary no-underline">
-          Back to log in
+          Back to Log In
         </Link>
       </p>
     </AuthLayout>
