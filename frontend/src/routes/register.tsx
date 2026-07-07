@@ -1,17 +1,23 @@
 import { useState } from 'react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
 import { z } from 'zod'
 import { AuthLayout } from '#/components/auth/auth-layout'
 import {
+  AuthAlert,
   AuthField,
   AuthHeading,
   AuthSubmit,
   OrDivider,
   firstError,
 } from '#/components/auth/auth-fields'
-import { RoleTabs, type AuthRole } from '#/components/auth/role-tabs'
+import { RoleTabs } from '#/components/auth/role-tabs'
+import type { AuthRole } from '#/components/auth/role-tabs'
 import { GoogleButton } from '#/components/auth/google-button'
+import { errorMessage } from '#/lib/api'
+import { register } from '#/lib/auth'
+import type { UserRole } from '#/lib/auth'
 
 export const Route = createFileRoute('/register')({ component: RegisterPage })
 
@@ -23,11 +29,16 @@ const SUBTITLES: Record<AuthRole, string> = {
 
 function RegisterPage() {
   const [role, setRole] = useState<AuthRole>('customer')
+  const [note, setNote] = useState<string | null>(null)
   const navigate = useNavigate()
 
-  function createAccount() {
-    navigate({ to: '/' })
-  }
+  const mutation = useMutation({
+    mutationFn: register,
+    // Registration doesn't auto-login; send them to log in with new credentials.
+    onSuccess: () => navigate({ to: '/login', search: { registered: true } }),
+  })
+
+  const errorMsg = mutation.isError ? errorMessage(mutation.error) : note
 
   const form = useForm({
     defaultValues: {
@@ -35,6 +46,7 @@ function RegisterPage() {
       org: '',
       invite: '',
       email: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
     },
@@ -47,7 +59,8 @@ function RegisterPage() {
           email: z
             .string()
             .min(1, 'Enter your email')
-            .email('Enter a valid email'),
+            .pipe(z.email('Enter a valid email')),
+          phoneNumber: z.string().min(1, 'Enter your phone number'),
           password: z.string().min(8, 'Use at least 8 characters'),
           confirmPassword: z.string().min(1, 'Confirm your password'),
         })
@@ -75,7 +88,18 @@ function RegisterPage() {
           }
         }),
     },
-    onSubmit: () => createAccount(),
+    onSubmit: ({ value }) => {
+      setNote(null)
+      mutation.mutate({
+        name: value.name,
+        email: value.email,
+        password: value.password,
+        phoneNumber: value.phoneNumber,
+        role: role.toUpperCase() as UserRole,
+        organizationName: role === 'organizer' ? value.org : undefined,
+        inviteCode: role === 'staff' ? value.invite : undefined,
+      })
+    },
   })
 
   return (
@@ -91,6 +115,8 @@ function RegisterPage() {
           form.handleSubmit()
         }}
       >
+        {errorMsg && <AuthAlert>{errorMsg}</AuthAlert>}
+
         <form.Field
           name="name"
           validators={{ onBlur: z.string().min(1, 'Enter your name') }}
@@ -161,7 +187,7 @@ function RegisterPage() {
             onBlur: z
               .string()
               .min(1, 'Enter your email')
-              .email('Enter a valid email'),
+              .pipe(z.email('Enter a valid email')),
           }}
         >
           {(field) => (
@@ -171,6 +197,27 @@ function RegisterPage() {
               type="email"
               autoComplete="email"
               placeholder="you@example.com"
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+              error={firstError(field.state.meta.errors)}
+            />
+          )}
+        </form.Field>
+
+        <form.Field
+          name="phoneNumber"
+          validators={{
+            onBlur: z.string().min(1, 'Enter your phone number'),
+          }}
+        >
+          {(field) => (
+            <AuthField
+              id="phoneNumber"
+              label="Phone Number"
+              type="tel"
+              autoComplete="tel"
+              placeholder="012-345 6789"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
@@ -222,14 +269,15 @@ function RegisterPage() {
           )}
         </form.Field>
 
-        <form.Subscribe selector={(s) => s.isSubmitting}>
-          {(isSubmitting) => (
-            <AuthSubmit disabled={isSubmitting}>Create account</AuthSubmit>
-          )}
-        </form.Subscribe>
+        <AuthSubmit disabled={mutation.isPending}>
+          {mutation.isPending ? 'Creating account…' : 'Create account'}
+        </AuthSubmit>
 
         <OrDivider />
-        <GoogleButton label="Sign up with Google" onClick={createAccount} />
+        <GoogleButton
+          label="Sign up with Google"
+          onClick={() => setNote('Google sign-in is coming soon.')}
+        />
 
         <p className="text-center text-[13px] text-muted-foreground">
           Already have an account?{' '}

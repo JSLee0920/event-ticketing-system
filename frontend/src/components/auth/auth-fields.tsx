@@ -75,6 +75,26 @@ export function AuthSubmit({
   )
 }
 
+export function AuthAlert({
+  children,
+  tone = 'error',
+}: {
+  children: ReactNode
+  tone?: 'error' | 'success'
+}) {
+  return (
+    <div
+      role={tone === 'error' ? 'alert' : 'status'}
+      className={cn(
+        'rounded-xl px-4 py-3 text-[13px] font-medium',
+        tone === 'error' ? 'bg-err-bg text-destructive' : 'bg-ok-bg text-ok',
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
 export function OrDivider() {
   return (
     <div className="my-0.5 flex items-center gap-3">

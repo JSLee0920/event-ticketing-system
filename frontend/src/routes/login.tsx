@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
 import { z } from 'zod'
 import { AuthLayout } from '#/components/auth/auth-layout'
 import {
+  AuthAlert,
   AuthField,
   AuthHeading,
   AuthSubmit,
@@ -10,30 +13,45 @@ import {
   firstError,
 } from '#/components/auth/auth-fields'
 import { GoogleButton } from '#/components/auth/google-button'
+import { errorMessage } from '#/lib/api'
+import { login, setToken } from '#/lib/auth'
 
-export const Route = createFileRoute('/login')({ component: LoginPage })
+export const Route = createFileRoute('/login')({
+  component: LoginPage,
+  validateSearch: (search: Record<string, unknown>) =>
+    search.registered === true || search.registered === 'true'
+      ? { registered: true as const }
+      : {},
+})
 
 function LoginPage() {
   const navigate = useNavigate()
+  const { registered } = Route.useSearch()
+  const [note, setNote] = useState<string | null>(null)
 
-  // Organizers land on the dashboard; everyone else on Discover.
-  // Those routes aren't built yet, so we route to the app root for now.
-  function signIn() {
-    navigate({ to: '/' })
-  }
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: ({ token }) => {
+      setToken(token)
+      // Discover/dashboard routes aren't built yet, so route to the app root.
+      navigate({ to: '/' })
+    },
+  })
+
+  const errorMsg = mutation.isError ? errorMessage(mutation.error) : note
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
     validators: {
       onSubmit: z.object({
-        email: z
-          .string()
-          .min(1, 'Enter your email')
-          .email('Enter a valid email'),
+        email: z.string().min(1, 'Enter your email').pipe(z.email('Enter a valid email')),
         password: z.string().min(1, 'Enter your password'),
       }),
     },
-    onSubmit: () => signIn(),
+    onSubmit: ({ value }) => {
+      setNote(null)
+      mutation.mutate(value)
+    },
   })
 
   return (
@@ -51,13 +69,17 @@ function LoginPage() {
           form.handleSubmit()
         }}
       >
+        {registered && !errorMsg && (
+          <AuthAlert tone="success">
+            Account created — log in to continue.
+          </AuthAlert>
+        )}
+        {errorMsg && <AuthAlert>{errorMsg}</AuthAlert>}
+
         <form.Field
           name="email"
           validators={{
-            onBlur: z
-              .string()
-              .min(1, 'Enter your email')
-              .email('Enter a valid email'),
+            onBlur: z.string().min(1, 'Enter your email').pipe(z.email('Enter a valid email')),
           }}
         >
           {(field) => (
@@ -100,14 +122,15 @@ function LoginPage() {
           Forgot Password?
         </Link>
 
-        <form.Subscribe selector={(s) => s.isSubmitting}>
-          {(isSubmitting) => (
-            <AuthSubmit disabled={isSubmitting}>Log in</AuthSubmit>
-          )}
-        </form.Subscribe>
+        <AuthSubmit disabled={mutation.isPending}>
+          {mutation.isPending ? 'Logging in…' : 'Log in'}
+        </AuthSubmit>
 
         <OrDivider />
-        <GoogleButton label="Sign in with Google" onClick={signIn} />
+        <GoogleButton
+          label="Sign in with Google"
+          onClick={() => setNote('Google sign-in is coming soon.')}
+        />
 
         <p className="text-center text-[13px] text-muted-foreground">
           New here?{' '}
