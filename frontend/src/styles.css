@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+/* Odeon (design handoff): Sora for display/amounts, Figtree for body */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Figtree:wght@400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
@@ -27,25 +29,33 @@
   --hero-a: rgba(79, 184, 178, 0.36);
   --hero-b: rgba(47, 106, 74, 0.2);
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.871 0.006 286.286);
+  /* Odeon palette (light) mapped onto shadcn semantic tokens */
+  --background: #f7f6f2; /* --bg */
+  --foreground: #001219; /* --txt */
+  --card: #ffffff;
+  --card-foreground: #001219;
+  --popover: #ffffff;
+  --popover-foreground: #001219;
+  --primary: #ca6702; /* --accent */
+  --primary-foreground: #ffffff; /* --onA */
+  --secondary: #efece3; /* --card2 */
+  --secondary-foreground: #001219;
+  --muted: #efece3;
+  --muted-foreground: #51666d; /* --sub */
+  --accent: #efece3; /* neutral hover surface */
+  --accent-foreground: #001219;
+  --destructive: #ae2012; /* --err */
+  --destructive-foreground: #ffffff;
+  --border: #e5e1d4; /* --line */
+  --input: #e5e1d4;
+  --ring: #ca6702; /* focus = accent */
+
+  /* Odeon-only tokens (no shadcn equivalent) */
+  --faint: #87979b;
+  --acc-soft: #f6e7d0;
+  --ok: #0e8074;
+  --ok-bg: #dcefe4;
+  --err-bg: #f4ddd4;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -83,25 +93,33 @@
   --hero-a: rgba(96, 215, 207, 0.18);
   --hero-b: rgba(110, 200, 154, 0.12);
 
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.141 0.005 285.823);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.141 0.005 285.823);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.442 0.017 285.786);
+  /* Odeon palette (dark) mapped onto shadcn semantic tokens */
+  --background: #001219; /* --bg */
+  --foreground: #f0ebdc; /* --txt */
+  --card: #07242e;
+  --card-foreground: #f0ebdc;
+  --popover: #07242e;
+  --popover-foreground: #f0ebdc;
+  --primary: color-mix(in srgb, #ca6702 80%, white); /* accent lightened for dark */
+  --primary-foreground: #001219; /* --onA */
+  --secondary: #0c3440; /* --card2 */
+  --secondary-foreground: #f0ebdc;
+  --muted: #0c3440;
+  --muted-foreground: #9db4b8; /* --sub */
+  --accent: #0c3440;
+  --accent-foreground: #f0ebdc;
+  --destructive: #e0756a; /* --err */
+  --destructive-foreground: #001219;
+  --border: #17434f; /* --line */
+  --input: #17434f;
+  --ring: color-mix(in srgb, #ca6702 80%, white);
+
+  /* Odeon-only tokens (dark) */
+  --faint: #69858c;
+  --acc-soft: color-mix(in srgb, #ca6702 22%, #07242e);
+  --ok: #94d2bd;
+  --ok-bg: #0b3a33;
+  --err-bg: #42150f;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -118,7 +136,13 @@
 }
 
 @theme inline {
-  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --color-faint: var(--faint);
+  --color-acc-soft: var(--acc-soft);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-err-bg: var(--err-bg);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
