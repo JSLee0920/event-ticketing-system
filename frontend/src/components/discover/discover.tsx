@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '#/lib/utils'
+import { useDebouncedValue } from '#/lib/use-debounce'
 import { EventCard } from './event-card'
 import { CATEGORY_ICON, SAMPLE_EVENTS } from './events'
 import type { EventCategory } from './events'
@@ -19,9 +20,17 @@ type CategoryFilter = 'All' | EventCategory
 export function Discover() {
   const [category, setCategory] = useState<CategoryFilter>('All')
   const [query, setQuery] = useState('')
+  const [activeFilters, setActiveFilters] = useState<string[]>([])
+  const debouncedQuery = useDebouncedValue(query, 250)
+
+  function toggleFilter(label: string) {
+    setActiveFilters((prev) =>
+      prev.includes(label) ? prev.filter((f) => f !== label) : [...prev, label],
+    )
+  }
 
   const events = useMemo(() => {
-    const q = query.trim().toLowerCase()
+    const q = debouncedQuery.trim().toLowerCase()
     return SAMPLE_EVENTS.filter((e) => {
       if (category !== 'All' && e.category !== category) return false
       if (!q) return true
@@ -29,7 +38,7 @@ export function Discover() {
         e.title.toLowerCase().includes(q) || e.venue.toLowerCase().includes(q)
       )
     })
-  }, [category, query])
+  }, [category, debouncedQuery])
 
   return (
     <div className="px-10 pb-[60px]">
@@ -79,17 +88,33 @@ export function Discover() {
           })}
         </div>
 
-        <div className="flex gap-2 text-[12.5px] font-semibold text-muted-foreground">
-          {FILTER_DROPDOWNS.map((label) => (
-            <button
-              key={label}
-              type="button"
-              className="flex items-center gap-1.5 rounded-full border border-dashed border-border px-3.5 py-2 hover:border-primary hover:text-primary"
-            >
-              {label}
-              <ChevronDown className="size-[13px]" strokeWidth={2.2} />
-            </button>
-          ))}
+        <div className="flex gap-2 text-[12.5px] font-semibold">
+          {FILTER_DROPDOWNS.map((label) => {
+            const active = activeFilters.includes(label)
+            return (
+              <button
+                key={label}
+                type="button"
+                aria-pressed={active}
+                onClick={() => toggleFilter(label)}
+                className={cn(
+                  'flex items-center gap-1.5 rounded-full border px-3.5 py-2 transition-colors',
+                  active
+                    ? 'border-primary bg-acc-soft text-primary'
+                    : 'border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary',
+                )}
+              >
+                {label}
+                <ChevronDown
+                  className={cn(
+                    'size-[13px] transition-transform',
+                    active && 'rotate-180',
+                  )}
+                  strokeWidth={2.2}
+                />
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -126,10 +151,10 @@ function Chip({
       type="button"
       onClick={onClick}
       className={cn(
-        'flex items-center gap-1.5 rounded-full px-[18px] py-[9px] text-[13px] font-semibold transition-colors',
+        'flex items-center gap-1.5 rounded-full border px-[18px] py-[9px] text-[13px] font-semibold transition-colors',
         active
-          ? 'bg-foreground text-background'
-          : 'bg-card shadow-soft hover:text-primary',
+          ? 'border-primary bg-primary text-primary-foreground'
+          : 'border-border bg-card hover:border-primary hover:text-primary',
       )}
     >
       {children}

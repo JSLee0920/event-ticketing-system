@@ -67,7 +67,7 @@ export function AppSidebar({
     >
       <div
         className={cn(
-          'flex items-center pb-1',
+          'flex items-center px-3 pb-1',
           collapsed ? 'justify-center' : 'justify-between',
         )}
       >
@@ -162,7 +162,7 @@ function SidebarLink({
         'flex items-center gap-[11px] rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors',
         collapsed && 'justify-center',
         active
-          ? 'bg-card text-foreground shadow-soft'
+          ? 'bg-[color-mix(in_srgb,var(--secondary),#000_8%)] text-foreground'
           : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
       )}
     >
