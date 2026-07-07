@@ -56,6 +56,14 @@
   --ok: #0e8074;
   --ok-bg: #dcefe4;
   --err-bg: #f4ddd4;
+  --odeon-surface: #ffffff; /* main content bg (--surface) */
+  --warn: #a96e00;
+  --warn-bg: #f6ecd0;
+  --info: #005f73;
+  --info-bg: #d8e9ec;
+  --stripe-a: #e9e1c4;
+  --stripe-b: #f1ebd6;
+  --stripe-txt: #9a8f68;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -120,6 +128,14 @@
   --ok: #94d2bd;
   --ok-bg: #0b3a33;
   --err-bg: #42150f;
+  --odeon-surface: #03181f;
+  --warn: #ee9b00;
+  --warn-bg: #392b06;
+  --info: #7cc3cf;
+  --info-bg: #0b3540;
+  --stripe-a: #082e38;
+  --stripe-b: #0d3742;
+  --stripe-txt: #4a6771;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -143,6 +159,16 @@
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);
   --color-err-bg: var(--err-bg);
+  --color-surface: var(--odeon-surface);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-stripe-a: var(--stripe-a);
+  --color-stripe-b: var(--stripe-b);
+  --color-stripe-txt: var(--stripe-txt);
+  --shadow-card: 0 2px 6px rgba(0, 18, 25, 0.05);
+  --shadow-soft: 0 1px 4px rgba(0, 18, 25, 0.04);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
