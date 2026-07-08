@@ -7,6 +7,7 @@ import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class EventController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<EventResponse> createEvent(
             @Valid @RequestBody EventCreateRequest request,
             @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
@@ -33,6 +35,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/publish")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<EventResponse> publishEvent(
             @PathVariable UUID id,
             @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
@@ -50,6 +53,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<EventResponse> updateEvent(
             @PathVariable UUID id,
             @Valid @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
