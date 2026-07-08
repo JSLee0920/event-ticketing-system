@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { useDebouncedValue } from '#/lib/use-debounce'
-import { EventCard } from './event-card'
+import { EventCard } from './EventCard'
 import { CATEGORY_ICON, SAMPLE_EVENTS } from './events'
 import type { EventCategory } from './events'
 

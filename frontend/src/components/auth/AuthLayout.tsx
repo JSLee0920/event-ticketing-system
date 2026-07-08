@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { OdeonWordmark } from './odeon-wordmark'
-import { AuthWallpaper } from './auth-wallpaper'
+import { OdeonWordmark } from './OdeonWordmark'
+import { AuthWallpaper } from './AuthWallpaper'
 
 export function AuthLayout({ children }: { children: ReactNode }) {
   return (

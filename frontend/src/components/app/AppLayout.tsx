@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { AppSidebar } from './app-sidebar'
-import type { NavKey } from './app-sidebar'
-import { AppTopbar } from './app-topbar'
+import { AppSidebar } from './AppSidebar'
+import type { NavKey } from './AppSidebar'
+import { AppTopbar } from './AppTopbar'
 
 export function AppLayout({
   active,

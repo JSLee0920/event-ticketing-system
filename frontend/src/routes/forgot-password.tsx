@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { AuthLayout } from '#/components/auth/auth-layout'
+import { AuthLayout } from '#/components/auth/AuthLayout'
 import {
   AuthField,
   AuthHeading,
   AuthSubmit,
-} from '#/components/auth/auth-fields'
+} from '#/components/auth/AuthFields'
 
 export const Route = createFileRoute('/forgot-password')({
   component: ForgotPasswordPage,

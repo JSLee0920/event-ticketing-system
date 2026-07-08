@@ -3,7 +3,7 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { z } from 'zod'
-import { AuthLayout } from '#/components/auth/auth-layout'
+import { AuthLayout } from '#/components/auth/AuthLayout'
 import {
   AuthAlert,
   AuthField,
@@ -11,10 +11,10 @@ import {
   AuthSubmit,
   OrDivider,
   firstError,
-} from '#/components/auth/auth-fields'
-import { RoleTabs } from '#/components/auth/role-tabs'
-import type { AuthRole } from '#/components/auth/role-tabs'
-import { GoogleButton } from '#/components/auth/google-button'
+} from '#/components/auth/AuthFields'
+import { RoleTabs } from '#/components/auth/RoleTabs'
+import type { AuthRole } from '#/components/auth/RoleTabs'
+import { GoogleButton } from '#/components/auth/GoogleButton'
 import { errorMessage } from '#/lib/api'
 import { register } from '#/lib/auth'
 import type { UserRole } from '#/lib/auth'
