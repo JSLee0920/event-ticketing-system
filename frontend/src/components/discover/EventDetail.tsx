@@ -8,7 +8,7 @@ export function EventDetail({ event }: { event: EventDetailData }) {
   const Icon = CATEGORY_ICON[event.category]
 
   return (
-    <div className="px-10 pb-[60px] pt-8">
+    <div className="px-4 pb-[60px] pt-6 sm:px-10 sm:pt-8">
       <Link
         to="/"
         className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground hover:text-primary"
@@ -17,7 +17,7 @@ export function EventDetail({ event }: { event: EventDetailData }) {
         Back to discover
       </Link>
 
-      <div className="relative mt-4 flex h-[260px] items-center justify-center overflow-hidden rounded-[18px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)]">
+      <div className="relative mt-4 flex h-[180px] items-center justify-center overflow-hidden rounded-[18px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)] sm:h-[260px]">
         <span className="text-[11px] tracking-[0.05em] text-stripe-txt">
           event cover
         </span>
@@ -29,7 +29,7 @@ export function EventDetail({ event }: { event: EventDetailData }) {
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
         <div>
-          <h1 className="font-display text-[34px] font-extrabold leading-[1.08] tracking-[-0.03em]">
+          <h1 className="font-display text-[26px] font-extrabold leading-[1.08] tracking-[-0.03em] sm:text-[34px]">
             {event.title}
           </h1>
 

@@ -62,7 +62,7 @@ export function Checkout() {
   }
 
   return (
-    <div className="px-10 pb-[60px] pt-8">
+    <div className="px-4 pb-[60px] pt-6 sm:px-10 sm:pt-8">
       <Link
         to="/events/$id"
         params={{ id: cart.eventId }}

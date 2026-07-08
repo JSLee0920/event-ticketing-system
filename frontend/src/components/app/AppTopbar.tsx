@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Bell, Calendar, Check, DollarSign, Moon, Sun } from 'lucide-react'
+import { Bell, Calendar, Check, DollarSign, Menu, Moon, Sun } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { useTheme } from '#/lib/theme'
 
@@ -32,7 +32,13 @@ const NOTIFICATIONS: Notification[] = [
   },
 ]
 
-export function AppTopbar({ title }: { title: string }) {
+export function AppTopbar({
+  title,
+  onMenu,
+}: {
+  title: string
+  onMenu: () => void
+}) {
   const { theme, toggle } = useTheme()
   const [notifOpen, setNotifOpen] = useState(false)
   const notifRef = useRef<HTMLDivElement>(null)
@@ -49,10 +55,20 @@ export function AppTopbar({ title }: { title: string }) {
   }, [notifOpen])
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border bg-surface px-6 py-2.5">
-      <h1 className="font-display text-lg font-semibold tracking-[-0.02em]">
-        {title}
-      </h1>
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border bg-surface px-4 py-2.5 sm:px-6">
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          title="Open menu"
+          onClick={onMenu}
+          className="flex size-9 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground lg:hidden"
+        >
+          <Menu className="size-[19px]" strokeWidth={2} />
+        </button>
+        <h1 className="font-display text-lg font-semibold tracking-[-0.02em]">
+          {title}
+        </h1>
+      </div>
 
       <div className="flex items-center gap-2.5">
         <div ref={notifRef} className="relative">
@@ -67,7 +83,7 @@ export function AppTopbar({ title }: { title: string }) {
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 top-11 z-[200] w-[330px] overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[0_12px_32px_rgba(0,18,25,0.14)]">
+            <div className="absolute right-0 top-11 z-[200] w-[calc(100vw-2rem)] max-w-[330px] overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[0_12px_32px_rgba(0,18,25,0.14)]">
               <div className="flex items-center justify-between border-b border-border px-[18px] py-3.5">
                 <span className="text-[13.5px] font-bold">Notifications</span>
                 <button

@@ -15,18 +15,27 @@ export function AppLayout({
   children: ReactNode
 }) {
   const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const role = getRole()
 
   return (
     <div className="flex items-stretch bg-background">
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-[90] bg-black/40 lg:hidden"
+        />
+      )}
       <AppSidebar
         active={active}
         role={role}
         collapsed={collapsed}
         onToggle={() => setCollapsed((v) => !v)}
+        mobileOpen={mobileOpen}
+        onCloseMobile={() => setMobileOpen(false)}
       />
       <div className="min-h-screen min-w-0 flex-1 bg-surface">
-        <AppTopbar title={title} />
+        <AppTopbar title={title} onMenu={() => setMobileOpen(true)} />
         {children}
       </div>
     </div>

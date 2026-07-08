@@ -41,9 +41,9 @@ export function Discover() {
   }, [category, debouncedQuery])
 
   return (
-    <div className="px-10 pb-[60px]">
-      <div className="flex flex-wrap items-end justify-between gap-6 pt-11">
-        <h2 className="font-display text-[42px] font-semibold leading-[1.06] tracking-[-0.04em]">
+    <div className="px-4 pb-[60px] sm:px-10">
+      <div className="flex flex-wrap items-end justify-between gap-4 pt-7 sm:gap-6 sm:pt-11">
+        <h2 className="font-display text-[32px] font-semibold leading-[1.06] tracking-[-0.04em] sm:text-[42px]">
           What's On
           <br />
           This Weekend?
@@ -88,7 +88,7 @@ export function Discover() {
           })}
         </div>
 
-        <div className="flex gap-2 text-[12.5px] font-semibold">
+        <div className="flex flex-wrap gap-2 text-[12.5px] font-semibold">
           {FILTER_DROPDOWNS.map((label) => {
             const active = activeFilters.includes(label)
             return (
