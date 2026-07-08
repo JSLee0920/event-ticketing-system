@@ -9,6 +9,15 @@ export type UserOrder = {
   status: OrderStatus
 }
 
+export type OrderLine = { label: string; qty: number; price: number }
+
+export type OrderDetail = UserOrder & {
+  when: string
+  venue: string
+  paymentMethod: string
+  lines: OrderLine[]
+}
+
 // Placeholder orders; swap for GET /api/orders (for the current user) once the
 // endpoint exists.
 export const SAMPLE_ORDERS: UserOrder[] = [
@@ -37,3 +46,36 @@ export const SAMPLE_ORDERS: UserOrder[] = [
     status: 'Refunded',
   },
 ]
+
+// Detail-only fields, keyed by order id. Merged with the summary in
+// getOrderDetail. Swap for GET /api/orders/{id} once the endpoint exists.
+const ORDER_EXTRAS: Record<
+  string,
+  Omit<OrderDetail, keyof UserOrder>
+> = {
+  'ORD-1043': {
+    when: 'Sat, Jul 11 · 8:00 PM',
+    venue: 'The Armory',
+    paymentMethod: 'Visa •••• 4242',
+    lines: [{ label: 'VIP', qty: 2, price: 65 }],
+  },
+  'ORD-1017': {
+    when: 'Thu, Jul 16 · 7:00 PM',
+    venue: 'Pier 9 Pavilion',
+    paymentMethod: 'Visa •••• 4242',
+    lines: [{ label: 'Table Seat', qty: 1, price: 78 }],
+  },
+  'ORD-0992': {
+    when: 'Sun, Jun 21 · 3:00 PM',
+    venue: 'Riverside Stadium',
+    paymentMethod: 'Mastercard •••• 6621',
+    lines: [{ label: 'Reserved Seat', qty: 2, price: 52 }],
+  },
+}
+
+export function getOrderDetail(id: string): OrderDetail | null {
+  const base = SAMPLE_ORDERS.find((o) => o.id === id)
+  const extra = ORDER_EXTRAS[id]
+  if (!base || !extra) return null
+  return { ...base, ...extra }
+}

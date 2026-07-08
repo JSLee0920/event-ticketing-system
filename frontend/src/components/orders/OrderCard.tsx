@@ -1,5 +1,9 @@
+import { Link } from '@tanstack/react-router'
 import { cn } from '#/lib/utils'
 import type { UserOrder } from './orders'
+
+const PILL_CLASS =
+  'rounded-full border border-border px-4 py-2 text-[12px] font-semibold no-underline text-foreground transition-colors hover:border-primary hover:text-primary'
 
 export function OrderCard({ order }: { order: UserOrder }) {
   return (
@@ -21,8 +25,16 @@ export function OrderCard({ order }: { order: UserOrder }) {
           ${order.total}
         </span>
         <div className="flex gap-2">
-          <PillLink>Details</PillLink>
-          <PillLink>View tickets</PillLink>
+          <Link
+            to="/orders/$id"
+            params={{ id: order.id }}
+            className={PILL_CLASS}
+          >
+            Details
+          </Link>
+          <Link to="/tickets" className={PILL_CLASS}>
+            View tickets
+          </Link>
         </div>
       </div>
     </div>
@@ -41,16 +53,5 @@ function StatusChip({ status }: { status: UserOrder['status'] }) {
     >
       {status}
     </span>
-  )
-}
-
-function PillLink({ children }: { children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      className="rounded-full border border-border px-4 py-2 text-[12px] font-semibold transition-colors hover:border-primary hover:text-primary"
-    >
-      {children}
-    </button>
   )
 }
