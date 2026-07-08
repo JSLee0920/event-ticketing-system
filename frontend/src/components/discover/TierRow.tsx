@@ -20,21 +20,21 @@ export function TierRow({
 
   return (
     <div className="rounded-[14px] border border-border p-3.5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold">{tier.name}</span>
+      <div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="truncate text-sm font-bold">{tier.name}</span>
             {low && (
-              <span className="rounded-full bg-err-bg px-2 py-0.5 text-[11px] font-bold text-destructive">
+              <span className="flex-none rounded-full bg-err-bg px-2 py-0.5 text-[11px] font-bold text-destructive">
                 Only {tier.remaining} left
               </span>
             )}
           </div>
-          <div className="mt-0.5 text-xs text-muted-foreground">
-            {tier.description}
-          </div>
+          <span className="flex-none text-[15px] font-bold">${tier.price}</span>
         </div>
-        <span className="flex-none text-[15px] font-bold">${tier.price}</span>
+        <div className="mt-0.5 text-xs text-muted-foreground">
+          {tier.description}
+        </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between">

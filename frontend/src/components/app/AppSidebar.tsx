@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import {
   Calendar,
+  CalendarSearch,
   Compass,
   LayoutDashboard,
   LogOut,
@@ -17,6 +18,7 @@ import type { UserRole } from '#/lib/auth'
 
 export type NavKey =
   | 'discover'
+  | 'browse'
   | 'tickets'
   | 'orders'
   | 'dashboard'
@@ -28,6 +30,7 @@ type NavItem = { key: NavKey; label: string; icon: LucideIcon }
 
 const CUSTOMER_NAV: NavItem[] = [
   { key: 'discover', label: 'Discover', icon: Compass },
+  { key: 'browse', label: 'Events', icon: CalendarSearch },
   { key: 'tickets', label: 'My Tickets', icon: Ticket },
   { key: 'orders', label: 'My Orders', icon: Receipt },
 ]
@@ -55,6 +58,7 @@ export function AppSidebar({
   // Only Discover has a route today; the rest are placeholders until built.
   function go(key: NavKey) {
     if (key === 'discover') navigate({ to: '/' })
+    else if (key === 'browse') navigate({ to: '/events' })
   }
 
   function logOut() {
