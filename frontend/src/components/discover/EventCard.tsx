@@ -11,7 +11,7 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
       to="/events/$id"
       params={{ id: event.id }}
       className={cn(
-        'block overflow-hidden rounded-[18px] border border-border bg-card text-left text-foreground no-underline shadow-card',
+        'group block overflow-hidden rounded-[18px] border border-border bg-card text-left text-foreground no-underline shadow-card transition-colors hover:border-primary',
         event.soldOut && 'opacity-80',
       )}
     >
@@ -70,7 +70,7 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
             Sold out
           </span>
         ) : (
-          <span className="rounded-full bg-primary px-[18px] py-2.5 text-[12.5px] font-bold text-primary-foreground">
+          <span className="rounded-full bg-primary px-[18px] py-2.5 text-[12.5px] font-bold text-primary-foreground transition-opacity group-hover:opacity-90">
             Get tickets
           </span>
         )}

@@ -11,7 +11,7 @@ export function EventRow({ event }: { event: DiscoverEvent }) {
       to="/events/$id"
       params={{ id: event.id }}
       className={cn(
-        'flex items-stretch gap-3 overflow-hidden rounded-[14px] border border-border bg-card text-left text-foreground no-underline shadow-card sm:gap-4',
+        'group flex items-stretch gap-3 overflow-hidden rounded-[14px] border border-border bg-card text-left text-foreground no-underline shadow-card transition-colors hover:border-primary sm:gap-4',
         event.soldOut && 'opacity-80',
       )}
     >
@@ -64,7 +64,7 @@ export function EventRow({ event }: { event: DiscoverEvent }) {
             Sold out
           </span>
         ) : (
-          <span className="rounded-full bg-primary px-3.5 py-2 text-[11px] font-bold text-primary-foreground">
+          <span className="rounded-full bg-primary px-3.5 py-2 text-[11px] font-bold text-primary-foreground transition-opacity group-hover:opacity-90">
             Get tickets
           </span>
         )}
