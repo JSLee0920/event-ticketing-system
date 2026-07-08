@@ -20,7 +20,7 @@ export function RefundFlow({
             <RotateCcw className="size-[16px]" strokeWidth={2.2} />
           </span>
           <div>
-            <div className="text-[13.5px] font-bold">Refund requested</div>
+            <div className="text-[13.5px] font-bold">Refund Requested</div>
             <div className="mt-0.5 text-[12.5px]">
               We’ve notified the organizer. You’ll get an email once it’s
               processed.
@@ -49,14 +49,14 @@ export function RefundFlow({
               onClick={() => setStage('requested')}
               className="rounded-full bg-destructive px-4 py-2 text-[12.5px] font-bold text-white transition-opacity hover:opacity-90"
             >
-              Confirm refund request
+              Confirm Refund Request
             </button>
             <button
               type="button"
               onClick={() => setStage('idle')}
               className="rounded-full border border-border px-4 py-2 text-[12.5px] font-semibold transition-colors hover:border-primary hover:text-primary"
             >
-              Keep my tickets
+              Keep My Tickets
             </button>
           </div>
         </div>
@@ -72,20 +72,20 @@ export function RefundFlow({
           type="button"
           className="rounded-full bg-primary px-4 py-2.5 text-[12.5px] font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
-          View tickets
+          View Tickets
         </button>
         <button
           type="button"
           className="rounded-full border border-border px-4 py-2.5 text-[12.5px] font-semibold transition-colors hover:border-primary hover:text-primary"
         >
-          Download receipt
+          Download Receipt
         </button>
         <button
           type="button"
           onClick={() => setStage('confirm')}
           className="rounded-full border border-destructive px-4 py-2.5 text-[12.5px] font-semibold text-destructive transition-opacity hover:opacity-80"
         >
-          Request refund
+          Request Refund
         </button>
       </div>
       <PolicyNote />

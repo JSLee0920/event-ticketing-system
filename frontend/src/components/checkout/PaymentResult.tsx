@@ -32,7 +32,7 @@ export function PaymentResult({
         </div>
 
         <h1 className="mt-4 font-display text-[24px] font-extrabold">
-          {ok ? 'Order confirmed' : 'Payment failed'}
+          {ok ? 'Order Confirmed' : 'Payment Failed'}
         </h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
           {ok
@@ -53,16 +53,16 @@ export function PaymentResult({
           {ok ? (
             <>
               <PillButton primary onClick={onDiscover}>
-                View my tickets
+                View My Tickets
               </PillButton>
-              <PillButton onClick={onDiscover}>Back to discover</PillButton>
+              <PillButton onClick={onDiscover}>Back To Discover</PillButton>
             </>
           ) : (
             <>
               <PillButton primary onClick={onRetry}>
                 Try again
               </PillButton>
-              <PillButton onClick={onDiscover}>View my orders</PillButton>
+              <PillButton onClick={onDiscover}>View My Orders</PillButton>
             </>
           )}
         </div>

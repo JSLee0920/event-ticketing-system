@@ -24,7 +24,7 @@ function OrderDetailPage() {
             to="/orders"
             className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
           >
-            Back to orders
+            Back To Orders
           </Link>
         </div>
       )}

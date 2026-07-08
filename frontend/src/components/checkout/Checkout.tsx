@@ -69,7 +69,7 @@ export function Checkout() {
         className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground no-underline hover:text-primary"
       >
         <ArrowLeft className="size-[15px]" strokeWidth={2.2} />
-        Back to event
+        Back To Event
       </Link>
 
       <div className="mt-4 grid grid-cols-1 gap-7 lg:grid-cols-[1fr_360px]">

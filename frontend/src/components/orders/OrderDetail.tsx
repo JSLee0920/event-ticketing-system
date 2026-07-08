@@ -15,7 +15,7 @@ export function OrderDetail({ order }: { order: OrderDetailData }) {
         className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground no-underline hover:text-primary"
       >
         <ArrowLeft className="size-[15px]" strokeWidth={2.2} />
-        Back to orders
+        Back To Orders
       </Link>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">

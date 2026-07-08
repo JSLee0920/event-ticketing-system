@@ -54,7 +54,7 @@ export function EventFilters({
         })}
         <span className="mx-1 h-5 w-px flex-none bg-border" />
         <Chip active={hideSoldOut} onClick={onToggleSoldOut}>
-          Available only
+          Available Only
         </Chip>
       </div>
     </div>

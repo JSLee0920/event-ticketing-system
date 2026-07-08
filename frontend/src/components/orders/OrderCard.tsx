@@ -33,7 +33,7 @@ export function OrderCard({ order }: { order: UserOrder }) {
             Details
           </Link>
           <Link to="/tickets" className={PILL_CLASS}>
-            View tickets
+            View Tickets
           </Link>
         </div>
       </div>

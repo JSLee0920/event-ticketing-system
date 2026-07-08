@@ -14,7 +14,7 @@ export function EventDetail({ event }: { event: EventDetailData }) {
         className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="size-[15px]" strokeWidth={2.2} />
-        Back to discover
+        Back To Discover
       </Link>
 
       <div className="relative mt-4 flex h-[180px] items-center justify-center overflow-hidden rounded-[18px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)] sm:h-[260px]">
@@ -46,7 +46,7 @@ export function EventDetail({ event }: { event: EventDetailData }) {
           </div>
 
           <h2 className="mt-9 text-[17px] font-bold tracking-[-0.01em]">
-            About this event
+            About This Event
           </h2>
           <p className="mt-2.5 max-w-[560px] text-sm leading-[1.65] text-muted-foreground">
             {event.about}

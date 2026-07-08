@@ -123,12 +123,12 @@ function LoginPage() {
         </Link>
 
         <AuthSubmit disabled={mutation.isPending}>
-          {mutation.isPending ? 'Logging in…' : 'Log in'}
+          {mutation.isPending ? 'Logging In…' : 'Log In'}
         </AuthSubmit>
 
         <OrDivider />
         <GoogleButton
-          label="Sign in with Google"
+          label="Sign In With Google"
           onClick={() => setNote('Google sign-in is coming soon.')}
         />
 
@@ -138,7 +138,7 @@ function LoginPage() {
             to="/register"
             className="font-semibold text-primary no-underline"
           >
-            Create an account
+            Create An Account
           </Link>
         </p>
       </form>

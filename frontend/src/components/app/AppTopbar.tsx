@@ -90,7 +90,7 @@ export function AppTopbar({
                   type="button"
                   className="text-[11.5px] font-semibold text-primary"
                 >
-                  Mark all read
+                  Mark All Read
                 </button>
               </div>
               {NOTIFICATIONS.map((n, i) => (

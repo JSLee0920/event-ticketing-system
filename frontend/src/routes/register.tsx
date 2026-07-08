@@ -270,19 +270,19 @@ function RegisterPage() {
         </form.Field>
 
         <AuthSubmit disabled={mutation.isPending}>
-          {mutation.isPending ? 'Creating account…' : 'Create account'}
+          {mutation.isPending ? 'Creating Account…' : 'Create Account'}
         </AuthSubmit>
 
         <OrDivider />
         <GoogleButton
-          label="Sign up with Google"
+          label="Sign Up With Google"
           onClick={() => setNote('Google sign-in is coming soon.')}
         />
 
         <p className="text-center text-[13px] text-muted-foreground">
           Already have an account?{' '}
           <Link to="/login" className="font-semibold text-primary no-underline">
-            Log in
+            Log In
           </Link>
         </p>
       </form>

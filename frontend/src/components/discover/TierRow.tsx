@@ -41,12 +41,12 @@ export function TierRow({
         {soldOut ? (
           <>
             <span className="rounded-full bg-secondary px-3 py-1 text-[12px] font-bold text-faint">
-              Sold out
+              Sold Out
             </span>
             {waitlisted ? (
               <span className="flex items-center gap-1 rounded-full bg-ok-bg px-3 py-1.5 text-[12px] font-bold text-ok">
                 <Check className="size-[13px]" strokeWidth={2.5} />
-                On the waitlist
+                On The Waitlist
               </span>
             ) : (
               <button
@@ -54,7 +54,7 @@ export function TierRow({
                 onClick={onWaitlist}
                 className="rounded-full border border-primary px-3 py-1.5 text-[12px] font-bold text-primary hover:bg-acc-soft"
               >
-                Join waitlist
+                Join Waitlist
               </button>
             )}
           </>

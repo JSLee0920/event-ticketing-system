@@ -8,7 +8,7 @@ export function EmptyCart() {
         <div className="mx-auto flex size-14 items-center justify-center rounded-full border-2 border-dashed border-border text-faint">
           <Ticket className="size-6" strokeWidth={2} />
         </div>
-        <h1 className="mt-4 text-[17px] font-bold">Your cart is empty</h1>
+        <h1 className="mt-4 text-[17px] font-bold">Your Cart Is Empty</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Add tickets from an event to check out.
         </p>
@@ -16,7 +16,7 @@ export function EmptyCart() {
           to="/"
           className="mt-5 inline-block rounded-full bg-primary px-5 py-2.5 text-[13px] font-bold text-primary-foreground no-underline hover:opacity-90"
         >
-          Browse events
+          Browse Events
         </Link>
       </div>
     </div>

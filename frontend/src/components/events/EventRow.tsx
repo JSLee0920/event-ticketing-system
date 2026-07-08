@@ -22,7 +22,7 @@ export function EventRow({ event }: { event: DiscoverEvent }) {
         {event.soldOut && (
           <div className="absolute inset-0 flex items-center justify-center bg-[color-mix(in_srgb,var(--odeon-surface)_55%,transparent)]">
             <span className="rounded-full bg-foreground px-4 py-2 text-[12px] font-bold text-background">
-              Sold out
+              Sold Out
             </span>
           </div>
         )}
@@ -61,11 +61,11 @@ export function EventRow({ event }: { event: DiscoverEvent }) {
 
         {event.soldOut ? (
           <span className="rounded-full bg-secondary px-3.5 py-2 text-[11px] font-bold text-faint">
-            Sold out
+            Sold Out
           </span>
         ) : (
           <span className="rounded-full bg-primary px-3.5 py-2 text-[11px] font-bold text-primary-foreground transition-opacity group-hover:opacity-90">
-            Get tickets
+            Get Tickets
           </span>
         )}
       </div>

@@ -50,7 +50,7 @@ function ForgotPasswordPage() {
 
       <p className="mt-4 text-center text-[13px] text-muted-foreground">
         <Link to="/login" className="font-semibold text-primary no-underline">
-          Back to Log In
+          Back To Log In
         </Link>
       </p>
     </AuthLayout>

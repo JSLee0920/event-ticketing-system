@@ -24,7 +24,7 @@ function EventDetailPage() {
             to="/"
             className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
           >
-            Back to discover
+            Back To Discover
           </Link>
         </div>
       )}
