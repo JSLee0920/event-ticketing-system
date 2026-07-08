@@ -42,6 +42,16 @@ const ORGANIZER_NAV: NavItem[] = [
   { key: 'payouts', label: 'Payouts', icon: Wallet },
 ]
 
+// NavKey → route path. Keys absent here have no route built yet (no-op on click).
+const NAV_ROUTES = {
+  discover: '/',
+  browse: '/events',
+  tickets: '/tickets',
+  orders: '/orders',
+  dashboard: '/dashboard',
+  settings: '/settings',
+} as const satisfies Partial<Record<NavKey, string>>
+
 export function AppSidebar({
   active,
   role,
@@ -60,13 +70,9 @@ export function AppSidebar({
   const navigate = useNavigate()
   const canOrganize = role === 'ORGANIZER' || role === 'STAFF'
 
-  // Only Discover has a route today; the rest are placeholders until built.
   function go(key: NavKey) {
-    if (key === 'discover') navigate({ to: '/' })
-    else if (key === 'browse') navigate({ to: '/events' })
-    else if (key === 'tickets') navigate({ to: '/tickets' })
-    else if (key === 'orders') navigate({ to: '/orders' })
-    else if (key === 'settings') navigate({ to: '/settings' })
+    const to = NAV_ROUTES[key as keyof typeof NAV_ROUTES]
+    if (to) navigate({ to })
     onCloseMobile()
   }
 
