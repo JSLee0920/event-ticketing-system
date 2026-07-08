@@ -23,6 +23,21 @@ export function isAuthenticated(): boolean {
 
 export type UserRole = 'CUSTOMER' | 'ORGANIZER' | 'STAFF'
 
+export function getRole(): UserRole | null {
+  const token = getToken()
+  if (!token) return null
+  try {
+    const payload = token.split('.')[1]
+    const json = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')))
+    const role = json.roles
+    return role === 'CUSTOMER' || role === 'ORGANIZER' || role === 'STAFF'
+      ? role
+      : null
+  } catch {
+    return null
+  }
+}
+
 type AuthResponse = { token: string }
 
 export type LoginPayload = {

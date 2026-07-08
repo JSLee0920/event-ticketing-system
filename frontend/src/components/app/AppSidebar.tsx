@@ -13,6 +13,7 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { clearToken } from '#/lib/auth'
+import type { UserRole } from '#/lib/auth'
 
 export type NavKey =
   | 'discover'
@@ -39,14 +40,17 @@ const ORGANIZER_NAV: NavItem[] = [
 
 export function AppSidebar({
   active,
+  role,
   collapsed,
   onToggle,
 }: {
   active: NavKey
+  role: UserRole | null
   collapsed: boolean
   onToggle: () => void
 }) {
   const navigate = useNavigate()
+  const canOrganize = role === 'ORGANIZER' || role === 'STAFF'
 
   // Only Discover has a route today; the rest are placeholders until built.
   function go(key: NavKey) {
@@ -100,24 +104,28 @@ export function AppSidebar({
         />
       ))}
 
-      <div
-        className={cn(
-          'px-3 pb-2 pt-5 text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint',
-          collapsed && 'text-center',
-        )}
-      >
-        {collapsed ? '•' : 'Organizer'}
-      </div>
+      {canOrganize && (
+        <>
+          <div
+            className={cn(
+              'px-3 pb-2 pt-5 text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint',
+              collapsed && 'text-center',
+            )}
+          >
+            {collapsed ? '•' : 'Organizer'}
+          </div>
 
-      {ORGANIZER_NAV.map((item) => (
-        <SidebarLink
-          key={item.key}
-          item={item}
-          active={active === item.key}
-          collapsed={collapsed}
-          onClick={() => go(item.key)}
-        />
-      ))}
+          {ORGANIZER_NAV.map((item) => (
+            <SidebarLink
+              key={item.key}
+              item={item}
+              active={active === item.key}
+              collapsed={collapsed}
+              onClick={() => go(item.key)}
+            />
+          ))}
+        </>
+      )}
 
       <div className="flex-1" />
 
