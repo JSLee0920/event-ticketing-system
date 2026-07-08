@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { cn } from '#/lib/utils'
 import { CATEGORY_ICON } from './events'
 import type { DiscoverEvent } from './events'
@@ -6,10 +7,11 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
   const Icon = CATEGORY_ICON[event.category]
 
   return (
-    <button
-      type="button"
+    <Link
+      to="/events/$id"
+      params={{ id: event.id }}
       className={cn(
-        'overflow-hidden rounded-[18px] border border-border bg-card text-left shadow-card transition-colors',
+        'block overflow-hidden rounded-[18px] border border-border bg-card text-left text-foreground no-underline shadow-card',
         event.soldOut && 'opacity-80',
       )}
     >
@@ -31,7 +33,7 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
       </div>
 
       <div className="px-[18px] pb-1.5 pt-[15px]">
-        <div className="text-[16px] font-bold leading-tight tracking-[-0.02em]">
+        <div className="text-[16px] font-bold leading-tight tracking-[-0.02em] text-foreground">
           {event.title}
         </div>
         <div className="mt-[5px] text-[12.5px] text-muted-foreground">
@@ -50,7 +52,9 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
           <span className="text-[14px] font-bold text-faint">—</span>
         ) : (
           <div className="flex flex-col gap-[3px]">
-            <span className="text-[14px] font-bold">{event.priceLabel}</span>
+            <span className="text-[14px] font-bold text-foreground">
+              {event.priceLabel}
+            </span>
             {event.scarcity && (
               <span className="text-[11px] font-bold text-destructive">
                 {event.scarcity}
@@ -69,6 +73,6 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
           </span>
         )}
       </div>
-    </button>
+    </Link>
   )
 }
