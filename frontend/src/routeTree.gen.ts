@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -20,6 +21,11 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EventsIdRouteImport } from './routes/events.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/events/$id': typeof EventsIdRoute
   '/orders/$id': typeof OrdersIdRoute
   '/events/': typeof EventsIndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/events/$id': typeof EventsIdRoute
   '/orders/$id': typeof OrdersIdRoute
   '/events': typeof EventsIndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/events/$id': typeof EventsIdRoute
   '/orders/$id': typeof OrdersIdRoute
   '/events/': typeof EventsIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/settings'
     | '/events/$id'
     | '/orders/$id'
     | '/events/'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/settings'
     | '/events/$id'
     | '/orders/$id'
     | '/events'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/settings'
     | '/events/$id'
     | '/orders/$id'
     | '/events/'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  SettingsRoute: typeof SettingsRoute
   EventsIdRoute: typeof EventsIdRoute
   OrdersIdRoute: typeof OrdersIdRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -162,6 +175,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  SettingsRoute: SettingsRoute,
   EventsIdRoute: EventsIdRoute,
   OrdersIdRoute: OrdersIdRoute,
   EventsIndexRoute: EventsIndexRoute,

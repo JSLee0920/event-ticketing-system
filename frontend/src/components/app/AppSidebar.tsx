@@ -66,6 +66,7 @@ export function AppSidebar({
     else if (key === 'browse') navigate({ to: '/events' })
     else if (key === 'tickets') navigate({ to: '/tickets' })
     else if (key === 'orders') navigate({ to: '/orders' })
+    else if (key === 'settings') navigate({ to: '/settings' })
     onCloseMobile()
   }
 
