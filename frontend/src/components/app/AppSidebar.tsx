@@ -61,13 +61,13 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        'sticky top-0 flex h-screen flex-none flex-col gap-0.5 overflow-hidden border-r border-border bg-background px-3.5 pb-[18px] pt-6 transition-[width] duration-150',
+        'sticky top-0 flex h-screen flex-none flex-col gap-0.5 overflow-hidden border-r border-border bg-background px-3.5 pb-[18px] pt-3 transition-[width] duration-150',
         collapsed ? 'w-[72px]' : 'w-[236px]',
       )}
     >
       <div
         className={cn(
-          'flex items-center px-3 pb-1',
+          'flex items-center px-3 pb-2',
           collapsed ? 'justify-center' : 'justify-between',
         )}
       >
@@ -75,7 +75,7 @@ export function AppSidebar({
           <button
             type="button"
             onClick={() => go('discover')}
-            className="font-display text-lg font-extrabold tracking-[-0.03em]"
+            className="font-display text-lg font-extrabold tracking-[-0.03em] cursor-pointer"
           >
             odeon<span className="text-primary">*</span>
           </button>
