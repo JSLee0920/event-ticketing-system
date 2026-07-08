@@ -123,7 +123,7 @@ export function Discover() {
       </div>
 
       {events.length > 0 ? (
-        <div className="grid grid-cols-1 gap-[22px] sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {events.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}

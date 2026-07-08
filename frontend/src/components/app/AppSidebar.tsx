@@ -139,12 +139,14 @@ export function AppSidebar({
         type="button"
         onClick={logOut}
         className={cn(
-          'flex items-center gap-[11px] rounded-xl px-3 py-2 text-[12.5px] font-semibold text-faint hover:bg-secondary hover:text-destructive',
+          'flex items-center gap-[11px] rounded-xl px-3 py-2.5 text-sm font-semibold text-faint hover:bg-secondary hover:text-destructive',
           collapsed && 'justify-center',
         )}
       >
-        <LogOut className="size-[15px] flex-none" strokeWidth={2} />
-        {!collapsed && <span className="whitespace-nowrap">Log Out</span>}
+        <LogOut className="size-[17px] flex-none" strokeWidth={2} />
+        {!collapsed && (
+          <span className="whitespace-nowrap leading-none">Log Out</span>
+        )}
       </button>
     </aside>
   )
@@ -175,7 +177,9 @@ function SidebarLink({
       )}
     >
       <Icon className="size-[17px] flex-none" strokeWidth={2} />
-      {!collapsed && <span className="whitespace-nowrap">{item.label}</span>}
+      {!collapsed && (
+        <span className="whitespace-nowrap leading-none">{item.label}</span>
+      )}
     </button>
   )
 }

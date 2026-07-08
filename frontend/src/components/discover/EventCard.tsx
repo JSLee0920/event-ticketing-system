@@ -19,10 +19,6 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
         <span className="text-[11px] tracking-[0.05em] text-stripe-txt">
           event cover
         </span>
-        <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full bg-card px-2.5 py-[5px] text-[11px] font-bold shadow-soft">
-          <Icon className="size-[13px]" strokeWidth={2} />
-          {event.category}
-        </div>
         {event.soldOut && (
           <div className="absolute inset-0 flex items-center justify-center bg-[color-mix(in_srgb,var(--odeon-surface)_55%,transparent)]">
             <span className="rounded-full bg-foreground px-4 py-2 text-[12px] font-bold text-background">
@@ -33,8 +29,14 @@ export function EventCard({ event }: { event: DiscoverEvent }) {
       </div>
 
       <div className="px-[18px] pb-1.5 pt-[15px]">
-        <div className="text-[16px] font-bold leading-tight tracking-[-0.02em] text-foreground">
-          {event.title}
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1 text-[16px] font-bold leading-[1.35] tracking-[-0.02em] text-foreground">
+            {event.title}
+          </div>
+          <span className="flex flex-none items-center gap-1 rounded-full border border-border px-2 py-1 text-[10.5px] font-bold leading-none shadow-soft">
+            <Icon className="size-[12px]" strokeWidth={2} />
+            {event.category}
+          </span>
         </div>
         <div className="mt-[5px] text-[12.5px] text-muted-foreground">
           {event.when} · {event.venue}
