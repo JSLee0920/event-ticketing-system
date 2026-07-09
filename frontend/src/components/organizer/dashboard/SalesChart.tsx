@@ -16,7 +16,7 @@ export function SalesChart() {
       <div className="mt-5 flex h-[160px] items-end gap-1.5">
         {SALES_OVER_TIME.map((point) => (
           <div
-            key={point.label}
+            key={point.id}
             className="flex flex-1 flex-col items-center gap-1.5"
           >
             <div

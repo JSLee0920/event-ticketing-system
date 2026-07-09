@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { cn } from '#/lib/utils'
 
 export type AuthRole = 'customer' | 'organizer' | 'staff'
@@ -18,10 +19,13 @@ export function RoleTabs({
   onChange: (role: AuthRole) => void
   label: string
 }) {
+  const refs = useRef<(HTMLButtonElement | null)[]>([])
+
   function move(dir: 1 | -1) {
     const i = ROLES.findIndex((r) => r.value === value)
-    const next = ROLES[(i + dir + ROLES.length) % ROLES.length]
-    onChange(next.value)
+    const nextIndex = (i + dir + ROLES.length) % ROLES.length
+    onChange(ROLES[nextIndex].value)
+    refs.current[nextIndex]?.focus()
   }
 
   return (
@@ -30,11 +34,14 @@ export function RoleTabs({
       aria-label={label}
       className="mt-[18px] flex gap-0 rounded-full bg-secondary p-1"
     >
-      {ROLES.map((role) => {
+      {ROLES.map((role, index) => {
         const active = role.value === value
         return (
           <button
             key={role.value}
+            ref={(el) => {
+              refs.current[index] = el
+            }}
             type="button"
             role="radio"
             aria-checked={active}

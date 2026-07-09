@@ -54,6 +54,8 @@ export function Checkout() {
         orderId={orderId}
         onRetry={() => setResult(null)}
         onDiscover={() => navigate({ to: '/' })}
+        onViewTickets={() => navigate({ to: '/tickets' })}
+        onViewOrders={() => navigate({ to: '/orders' })}
       />
     )
   }

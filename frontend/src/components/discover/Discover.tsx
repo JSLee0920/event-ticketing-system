@@ -54,6 +54,7 @@ export function Discover() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search events, venues…"
+              aria-label="Search events and venues"
               className="w-full border-none bg-transparent text-sm outline-none placeholder:text-faint"
             />
           </div>

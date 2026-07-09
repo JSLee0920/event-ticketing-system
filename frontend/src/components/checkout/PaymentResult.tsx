@@ -8,11 +8,15 @@ export function PaymentResult({
   orderId,
   onRetry,
   onDiscover,
+  onViewTickets,
+  onViewOrders,
 }: {
   result: PayResult
   orderId: string
   onRetry: () => void
   onDiscover: () => void
+  onViewTickets: () => void
+  onViewOrders: () => void
 }) {
   const ok = result === 'success'
   return (
@@ -52,7 +56,7 @@ export function PaymentResult({
         <div className="mt-6 flex items-center justify-center gap-3">
           {ok ? (
             <>
-              <PillButton primary onClick={onDiscover}>
+              <PillButton primary onClick={onViewTickets}>
                 View My Tickets
               </PillButton>
               <PillButton onClick={onDiscover}>Back To Discover</PillButton>
@@ -62,7 +66,7 @@ export function PaymentResult({
               <PillButton primary onClick={onRetry}>
                 Try again
               </PillButton>
-              <PillButton onClick={onDiscover}>View My Orders</PillButton>
+              <PillButton onClick={onViewOrders}>View My Orders</PillButton>
             </>
           )}
         </div>

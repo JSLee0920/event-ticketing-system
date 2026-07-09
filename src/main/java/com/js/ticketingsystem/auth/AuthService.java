@@ -33,9 +33,11 @@ public class AuthService {
         if (role == Role.ORGANIZER && isBlank(request.organizationName())) {
             throw new IllegalArgumentException("Organization name is required for organizers");
         }
-        // TODO: verify the invite code against a real staff-invite system once it exists.
-        if (role == Role.STAFF && isBlank(request.inviteCode())) {
-            throw new IllegalArgumentException("Staff invite code is required");
+        // Staff accounts must be provisioned through a verified invite flow, which does
+        // not exist yet. Block self-registration so anyone can't claim STAFF by sending
+        // an arbitrary invite code. Re-enable with real verification once it's built.
+        if (role == Role.STAFF) {
+            throw new IllegalArgumentException("Staff accounts cannot be self-registered");
         }
 
         // Create new user

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import type { UserTicket } from './tickets'
 
@@ -22,6 +23,17 @@ export function QrModal({
   onClose: () => void
 }) {
   const cells = cellsFor(ticket.code)
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  // Close on Escape; move focus into the modal on open.
+  useEffect(() => {
+    closeRef.current?.focus()
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [onClose])
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center px-4">
@@ -31,8 +43,14 @@ export function QrModal({
         onClick={onClose}
         className="fixed inset-0 bg-black/50"
       />
-      <div className="relative w-full max-w-[340px] rounded-[18px] border border-border bg-card p-6 text-center shadow-card">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Ticket QR code for ${ticket.eventTitle}`}
+        className="relative w-full max-w-[340px] rounded-[18px] border border-border bg-card p-6 text-center shadow-card"
+      >
         <button
+          ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label="Close"

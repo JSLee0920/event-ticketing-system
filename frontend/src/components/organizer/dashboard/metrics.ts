@@ -60,22 +60,22 @@ export const REVENUE_BY_EVENT: RevenueRow[] = [
   { event: 'Brush & Barrel', amount: 1848 },
 ]
 
-export type SalesPoint = { label: string; value: number }
+export type SalesPoint = { id: string; label: string; value: number }
 
-// Sales over the last 14 days.
+// Sales over the last 14 days. `id` is a stable unique key (labels repeat).
 export const SALES_OVER_TIME: SalesPoint[] = [
-  { label: 'M', value: 620 },
-  { label: 'T', value: 810 },
-  { label: 'W', value: 540 },
-  { label: 'T', value: 980 },
-  { label: 'F', value: 1220 },
-  { label: 'S', value: 1640 },
-  { label: 'S', value: 1180 },
-  { label: 'M', value: 720 },
-  { label: 'T', value: 900 },
-  { label: 'W', value: 1040 },
-  { label: 'T', value: 1320 },
-  { label: 'F', value: 1500 },
-  { label: 'S', value: 1780 },
-  { label: 'S', value: 1360 },
+  { id: 'd1', label: 'M', value: 620 },
+  { id: 'd2', label: 'T', value: 810 },
+  { id: 'd3', label: 'W', value: 540 },
+  { id: 'd4', label: 'T', value: 980 },
+  { id: 'd5', label: 'F', value: 1220 },
+  { id: 'd6', label: 'S', value: 1640 },
+  { id: 'd7', label: 'S', value: 1180 },
+  { id: 'd8', label: 'M', value: 720 },
+  { id: 'd9', label: 'T', value: 900 },
+  { id: 'd10', label: 'W', value: 1040 },
+  { id: 'd11', label: 'T', value: 1320 },
+  { id: 'd12', label: 'F', value: 1500 },
+  { id: 'd13', label: 'S', value: 1780 },
+  { id: 'd14', label: 'S', value: 1360 },
 ]

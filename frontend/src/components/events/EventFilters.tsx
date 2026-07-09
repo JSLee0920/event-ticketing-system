@@ -31,6 +31,7 @@ export function EventFilters({
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder="Search events, venues…"
+          aria-label="Search events and venues"
           className="w-full border-none bg-transparent text-sm outline-none placeholder:text-faint"
         />
       </div>

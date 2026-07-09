@@ -68,6 +68,7 @@ export function Attendees({ eventId }: { eventId: string }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search name or email…"
+          aria-label="Search attendees by name or email"
           className="w-full border-none bg-transparent text-sm outline-none placeholder:text-faint"
         />
       </div>
