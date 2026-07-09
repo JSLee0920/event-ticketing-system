@@ -4,11 +4,14 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
+import com.js.ticketingsystem.user.UserService;
+import com.js.ticketingsystem.user.dtos.UserSummaryResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +22,11 @@ import java.util.UUID;
 public class EventController {
 
     private final EventService eventService;
+    private final UserService userService;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -47,9 +52,19 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public ResponseEntity<List<EventSummaryResponse>> getMyEvents(
+            @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
+        return ResponseEntity.ok(eventService.getMyEvents(organizerEmail));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEventById(@PathVariable UUID id) {
-        return ResponseEntity.ok(eventService.getEventById(id));
+    public ResponseEntity<EventResponse> getEventById(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt) {
+        String viewerEmail = jwt != null ? jwt.getSubject() : null;
+        return ResponseEntity.ok(eventService.getEventById(id, viewerEmail));
     }
 
     @PutMapping("/{id}")
@@ -58,5 +73,14 @@ public class EventController {
             @PathVariable UUID id,
             @Valid @RequestBody EventUpdateRequest request, @AuthenticationPrincipal(expression = "subject") String organizerEmail) {
         return ResponseEntity.ok(eventService.updateEvent(id, request, organizerEmail));
+    }
+
+    @GetMapping("/{id}/attendees")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public ResponseEntity<List<UserSummaryResponse>> getEventAttendees(
+            @PathVariable("id") UUID eventId,
+            @AuthenticationPrincipal(expression = "subject") String email
+    ) {
+        return ResponseEntity.ok(userService.getAttendeesByEventId(eventId, email));
     }
 }

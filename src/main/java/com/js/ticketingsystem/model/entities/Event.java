@@ -45,7 +45,7 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<TicketType> tickets = new ArrayList<>();
+    private List<TicketType> ticketTypes = new ArrayList<>();
 
     @ManyToMany
     @Builder.Default

@@ -5,10 +5,7 @@ import com.js.ticketingsystem.event.dtos.EventCreateRequest;
 import com.js.ticketingsystem.event.dtos.EventResponse;
 import com.js.ticketingsystem.event.dtos.EventSummaryResponse;
 import com.js.ticketingsystem.event.dtos.EventUpdateRequest;
-import com.js.ticketingsystem.model.entities.Category;
-import com.js.ticketingsystem.model.entities.Event;
-import com.js.ticketingsystem.model.entities.User;
-import com.js.ticketingsystem.model.entities.Venue;
+import com.js.ticketingsystem.model.entities.*;
 import com.js.ticketingsystem.model.enums.EventStatus;
 import com.js.ticketingsystem.repository.CategoryRepository;
 import com.js.ticketingsystem.repository.EventRepository;
@@ -60,21 +57,48 @@ public class EventService {
                 .status(EventStatus.DRAFT)
                 .build();
 
+        List<TicketType> ticketTypes = request.ticketTypes().stream().map(tReq ->
+                TicketType.builder()
+                        .event(event)
+                        .name(tReq.name())
+                        .price(tReq.price())
+                        .description(tReq.description())
+                        .totalQuantity(tReq.quantity())
+                        .availableQuantity(tReq.quantity()) // Available starts exactly equal to Total
+                        .build()
+        ).toList();
+
+        event.setTicketTypes(ticketTypes);
+
         Event savedEvent = eventRepository.save(event);
 
         return eventMapper.toEventResponse(savedEvent);
     }
 
     public List<EventSummaryResponse> getAllEvents() {
-        return eventRepository.findAll()
+        // Public listing only exposes events that are on sale
+        return eventRepository.findByStatus(EventStatus.PUBLISHED)
                 .stream()
                 .map(eventMapper::toEventSummaryResponse)
                 .toList();
     }
 
-    public EventResponse getEventById(UUID eventId) {
+    public List<EventSummaryResponse> getMyEvents(String organizerEmail) {
+        return eventRepository.findByOrganizerEmailOrderByStartTimeDesc(organizerEmail)
+                .stream()
+                .map(eventMapper::toEventSummaryResponse)
+                .toList();
+    }
+
+    public EventResponse getEventById(UUID eventId, String viewerEmail) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        // Drafts are only visible to their organizer
+        if (event.getStatus() == EventStatus.DRAFT
+                && (viewerEmail == null || !event.getOrganizer().getEmail().equals(viewerEmail))) {
+            throw new ResourceNotFoundException("Event not found");
+        }
 
         return eventMapper.toEventResponse(event);
     }
