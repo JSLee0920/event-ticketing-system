@@ -8,21 +8,21 @@ export function EventDetail({ event }: { event: EventDetailData }) {
   const Icon = CATEGORY_ICON[event.category]
 
   return (
-    <div className="px-4 pb-[60px] pt-6 sm:px-10 sm:pt-8">
+    <div className="px-4 pb-15 pt-6 sm:px-10 sm:pt-8">
       <Link
         to="/"
         className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground hover:text-primary"
       >
-        <ArrowLeft className="size-[15px]" strokeWidth={2.2} />
+        <ArrowLeft className="size-3.75" strokeWidth={2.2} />
         Back To Discover
       </Link>
 
-      <div className="relative mt-4 flex h-[180px] items-center justify-center overflow-hidden rounded-[18px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)] sm:h-[260px]">
-        <span className="text-[11px] tracking-[0.05em] text-stripe-txt">
+      <div className="relative mt-4 flex h-45 items-center justify-center overflow-hidden rounded-[18px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)] sm:h-[260px]">
+        <span className="text-[11px] tracking-wider text-stripe-txt">
           event cover
         </span>
         <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-card px-2.5 py-[5px] text-[11px] font-bold shadow-soft">
-          <Icon className="size-[13px]" strokeWidth={2} />
+          <Icon className="size-3.25" strokeWidth={2} />
           {event.category}
         </div>
       </div>
@@ -48,12 +48,12 @@ export function EventDetail({ event }: { event: EventDetailData }) {
           <h2 className="mt-9 text-[17px] font-bold tracking-[-0.01em]">
             About This Event
           </h2>
-          <p className="mt-2.5 max-w-[560px] text-sm leading-[1.65] text-muted-foreground">
+          <p className="mt-2.5 max-w-140 text-sm leading-[1.65] text-muted-foreground">
             {event.about}
           </p>
         </div>
 
-        <div className="lg:sticky lg:top-[84px] lg:self-start">
+        <div className="lg:sticky lg:top-21 lg:self-start">
           <EventTickets event={event} />
         </div>
       </div>
@@ -73,7 +73,7 @@ function InfoRow({
   return (
     <div className="flex items-center gap-3">
       <div className="flex size-9 flex-none items-center justify-center rounded-[10px] bg-acc-soft text-primary">
-        <Icon className="size-[17px]" strokeWidth={2} />
+        <Icon className="size-4.25" strokeWidth={2} />
       </div>
       <div>
         <div className="text-sm font-semibold">{title}</div>

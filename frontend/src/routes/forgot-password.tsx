@@ -24,13 +24,13 @@ function ForgotPasswordPage() {
       {sent ? (
         <div
           role="status"
-          className="mt-[18px] rounded-xl bg-ok-bg px-4 py-3.5 text-center text-[13px] font-semibold leading-normal text-ok"
+          className="mt-4.5 rounded-xl bg-ok-bg px-4 py-3.5 text-center text-[13px] font-semibold leading-normal text-ok"
         >
           Reset link sent — check your inbox.
         </div>
       ) : (
         <form
-          className="mt-[18px] flex flex-col gap-3.5"
+          className="mt-4.5 flex flex-col gap-3.5"
           onSubmit={(e) => {
             e.preventDefault()
             setSent(true)

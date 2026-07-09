@@ -117,7 +117,7 @@ export function AppSidebar({
           title={collapsed ? 'Open sidebar' : 'Close sidebar'}
           className="hidden size-8 items-center justify-center rounded-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground lg:flex"
         >
-          <PanelLeft className="size-[17px]" strokeWidth={2} />
+          <PanelLeft className="size-4.25" strokeWidth={2} />
         </button>
         <button
           type="button"
@@ -126,7 +126,7 @@ export function AppSidebar({
           title="Close menu"
           className="flex size-8 items-center justify-center rounded-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground lg:hidden"
         >
-          <X className="size-[18px]" strokeWidth={2} />
+          <X className="size-4.5" strokeWidth={2} />
         </button>
       </div>
 
