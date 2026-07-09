@@ -5,6 +5,7 @@ import com.js.ticketingsystem.venue.dtos.VenueResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class VenueController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<VenueResponse> createVenue(@Valid @RequestBody VenueRequest request) {
         VenueResponse response = venueService.createVenue(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

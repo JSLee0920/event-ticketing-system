@@ -29,12 +29,24 @@ public class AuthService {
             throw new DuplicateResourceException("Email is already registered");
         }
 
+        Role role = request.role();
+        if (role == Role.ORGANIZER && isBlank(request.organizationName())) {
+            throw new IllegalArgumentException("Organization name is required for organizers");
+        }
+        // Staff accounts must be provisioned through a verified invite flow, which does
+        // not exist yet. Block self-registration so anyone can't claim STAFF by sending
+        // an arbitrary invite code. Re-enable with real verification once it's built.
+        if (role == Role.STAFF) {
+            throw new IllegalArgumentException("Staff accounts cannot be self-registered");
+        }
+
         // Create new user
         User user = User.builder()
                 .name(request.name())
                 .email(request.email())
                 .phoneNum(request.phoneNumber())
-                .role(Role.CUSTOMER)
+                .role(role)
+                .organizationName(role == Role.ORGANIZER ? request.organizationName() : null)
                 .password(passwordEncoder.encode(request.password())).build();
 
         userRepository.save(user);
@@ -42,6 +54,10 @@ public class AuthService {
         // Generate token
         String token = tokenService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token);
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 
     public AuthResponse login(LoginRequest request) {

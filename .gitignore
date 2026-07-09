@@ -35,3 +35,5 @@ build/
 src/main/resources/certs/
 
 .skills/
+design_handoff_odeon_app/
+CLAUDE.md
