@@ -49,6 +49,8 @@ const NAV_ROUTES = {
   tickets: '/tickets',
   orders: '/orders',
   dashboard: '/dashboard',
+  events: '/organizer/events',
+  payouts: '/organizer/payouts',
   settings: '/settings',
 } as const satisfies Partial<Record<NavKey, string>>
 

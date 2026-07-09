@@ -11,7 +11,7 @@ export function TicketCard({
 }) {
   return (
     <div className="overflow-hidden rounded-[18px] border border-border bg-card shadow-card transition-colors hover:border-primary">
-      <div className="h-[96px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)]" />
+      <div className="h-[150px] bg-[repeating-linear-gradient(45deg,var(--stripe-a)_0_10px,var(--stripe-b)_10px_20px)]" />
 
       <div className="px-5 pt-4">
         <div className="text-[15px] font-bold leading-[1.3] tracking-[-0.02em]">
