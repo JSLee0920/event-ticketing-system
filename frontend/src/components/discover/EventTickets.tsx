@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { cn } from '#/lib/utils'
 import { setCart } from '#/lib/cart'
@@ -11,13 +11,9 @@ export function EventTickets({ event }: { event: EventDetail }) {
   const [qty, setQty] = useState<Partial<Record<string, number>>>({})
   const [waitlist, setWaitlist] = useState<Partial<Record<string, boolean>>>({})
 
-  const total = useMemo(
-    () =>
-      event.tiers.reduce(
-        (sum, tier) => sum + (qty[tier.id] ?? 0) * tier.price,
-        0,
-      ),
-    [event.tiers, qty],
+  const total = event.tiers.reduce(
+    (sum, tier) => sum + (qty[tier.id] ?? 0) * tier.price,
+    0,
   )
 
   function setTierQty(tier: EventTier, next: number) {

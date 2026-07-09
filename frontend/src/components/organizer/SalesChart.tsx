@@ -14,8 +14,11 @@ export function SalesChart() {
       </div>
 
       <div className="mt-5 flex h-[160px] items-end gap-1.5">
-        {SALES_OVER_TIME.map((point, i) => (
-          <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+        {SALES_OVER_TIME.map((point) => (
+          <div
+            key={point.label}
+            className="flex flex-1 flex-col items-center gap-1.5"
+          >
             <div
               className="w-full rounded-t-[4px] bg-primary/80 transition-colors hover:bg-primary"
               style={{ height: `${(point.value / max) * 100}%` }}

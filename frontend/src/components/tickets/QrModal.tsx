@@ -24,17 +24,18 @@ export function QrModal({
   const cells = cellsFor(ticket.code)
 
   return (
-    <div
-      onClick={onClose}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 px-4"
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[340px] rounded-[18px] border border-border bg-card p-6 text-center shadow-card"
-      >
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4">
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={onClose}
+        className="fixed inset-0 bg-black/50"
+      />
+      <div className="relative w-full max-w-[340px] rounded-[18px] border border-border bg-card p-6 text-center shadow-card">
         <button
           type="button"
           onClick={onClose}
+          aria-label="Close"
           title="Close"
           className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground"
         >

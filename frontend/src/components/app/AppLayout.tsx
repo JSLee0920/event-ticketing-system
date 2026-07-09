@@ -21,7 +21,9 @@ export function AppLayout({
   return (
     <div className="flex items-stretch bg-background">
       {mobileOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Close menu"
           onClick={() => setMobileOpen(false)}
           className="fixed inset-0 z-[90] bg-black/40 lg:hidden"
         />

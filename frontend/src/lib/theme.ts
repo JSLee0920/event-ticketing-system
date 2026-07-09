@@ -14,18 +14,16 @@ function applyTheme(theme: Theme): void {
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [theme, setTheme] = useState<Theme>(getStoredTheme)
 
+  // Sync the DOM to the current theme (external system — a legit effect use).
   useEffect(() => {
-    const stored = getStoredTheme()
-    setTheme(stored)
-    applyTheme(stored)
-  }, [])
+    applyTheme(theme)
+  }, [theme])
 
   function toggle() {
     const next: Theme = theme === 'dark' ? 'light' : 'dark'
     setTheme(next)
-    applyTheme(next)
     window.localStorage.setItem(THEME_KEY, next)
   }
 

@@ -17,7 +17,7 @@ export function AuthHeading({
         {title}
       </h1>
       {subtitle !== undefined && (
-        <p className="mt-3 min-h-[18px] text-center text-[13px] leading-relaxed text-muted-foreground">
+        <p className="mt-3 min-h-4.5 text-center text-[13px] leading-relaxed text-muted-foreground">
           {subtitle}
         </p>
       )}
@@ -47,12 +47,13 @@ export function AuthField({
       <Input
         id={id}
         aria-invalid={error ? true : undefined}
-        className={cn('h-auto rounded-xl border-[1.5px] px-4 py-3 text-sm', className)}
+        className={cn(
+          'h-auto rounded-xl border-[1.5px] px-4 py-3 text-sm',
+          className,
+        )}
         {...props}
       />
-      {error && (
-        <p className="text-xs font-medium text-destructive">{error}</p>
-      )}
+      {error && <p className="text-xs font-medium text-destructive">{error}</p>}
     </div>
   )
 }

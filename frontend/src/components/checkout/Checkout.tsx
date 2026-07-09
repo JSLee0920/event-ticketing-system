@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { clearCart, getCart } from '#/lib/cart'
@@ -24,11 +24,8 @@ export function Checkout() {
   const [promoError, setPromoError] = useState<string | null>(null)
   const [result, setResult] = useState<PayResult | null>(null)
 
-  const subtotal = useMemo(
-    () =>
-      cart?.lines.reduce((sum, line) => sum + line.price * line.qty, 0) ?? 0,
-    [cart],
-  )
+  const subtotal =
+    cart?.lines.reduce((sum, line) => sum + line.price * line.qty, 0) ?? 0
   const discount = promoApplied ? Math.round(subtotal * PROMO_RATE) : 0
   const total = subtotal - discount
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { useDebouncedValue } from '#/lib/use-debounce'
@@ -29,16 +29,14 @@ export function Discover() {
     )
   }
 
-  const events = useMemo(() => {
-    const q = debouncedQuery.trim().toLowerCase()
-    return SAMPLE_EVENTS.filter((e) => {
-      if (category !== 'All' && e.category !== category) return false
-      if (!q) return true
-      return (
-        e.title.toLowerCase().includes(q) || e.venue.toLowerCase().includes(q)
-      )
-    })
-  }, [category, debouncedQuery])
+  const q = debouncedQuery.trim().toLowerCase()
+  const events = SAMPLE_EVENTS.filter((e) => {
+    if (category !== 'All' && e.category !== category) return false
+    if (!q) return true
+    return (
+      e.title.toLowerCase().includes(q) || e.venue.toLowerCase().includes(q)
+    )
+  })
 
   return (
     <div className="px-4 pb-[60px] sm:px-10">

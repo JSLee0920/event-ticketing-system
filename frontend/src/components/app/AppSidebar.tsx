@@ -86,9 +86,9 @@ export function AppSidebar({
     <aside
       className={cn(
         // Mobile: fixed off-canvas drawer. lg: static sticky rail.
-        'fixed inset-y-0 left-0 z-[100] flex h-screen w-[236px] flex-none flex-col gap-0.5 overflow-hidden border-r border-border bg-background px-3.5 pb-[18px] pt-3 transition-transform duration-200 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 lg:transition-[width]',
+        'fixed inset-y-0 left-0 z-100 flex h-screen w-59 flex-none flex-col gap-0.5 overflow-hidden border-r border-border bg-background px-3.5 pb-4.5 pt-3 transition-transform duration-200 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 lg:transition-[width]',
         mobileOpen ? 'translate-x-0' : '-translate-x-full',
-        collapsed ? 'lg:w-[72px]' : 'lg:w-[236px]',
+        collapsed ? 'lg:w-18' : 'lg:w-59',
       )}
     >
       <div
@@ -111,6 +111,7 @@ export function AppSidebar({
         <button
           type="button"
           onClick={onToggle}
+          aria-label={collapsed ? 'Open sidebar' : 'Close sidebar'}
           title={collapsed ? 'Open sidebar' : 'Close sidebar'}
           className="hidden size-8 items-center justify-center rounded-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground lg:flex"
         >
@@ -119,6 +120,7 @@ export function AppSidebar({
         <button
           type="button"
           onClick={onCloseMobile}
+          aria-label="Close menu"
           title="Close menu"
           className="flex size-8 items-center justify-center rounded-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground lg:hidden"
         >

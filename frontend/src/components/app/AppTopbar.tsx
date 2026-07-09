@@ -59,6 +59,7 @@ export function AppTopbar({
       <div className="flex items-center gap-2">
         <button
           type="button"
+          aria-label="Open menu"
           title="Open menu"
           onClick={onMenu}
           className="flex size-9 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground lg:hidden"
@@ -74,6 +75,7 @@ export function AppTopbar({
         <div ref={notifRef} className="relative">
           <button
             type="button"
+            aria-label="Notifications"
             title="Notifications"
             onClick={() => setNotifOpen((v) => !v)}
             className="relative flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -95,7 +97,7 @@ export function AppTopbar({
               </div>
               {NOTIFICATIONS.map((n, i) => (
                 <div
-                  key={i}
+                  key={n.text}
                   className={cn(
                     'flex gap-3 px-[18px] py-3.5 hover:bg-secondary',
                     i < NOTIFICATIONS.length - 1 && 'border-b border-border',
@@ -118,6 +120,7 @@ export function AppTopbar({
 
         <button
           type="button"
+          aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
           title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
           onClick={toggle}
           className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
